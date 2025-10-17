@@ -248,4 +248,18 @@ public class JokerProcessor
         
         return closest;
     }
+    
+    public static void RestoreJokerEffects(List<Joker> jokers)
+    {
+        var allJokers = GetAllJokers();
+        
+        foreach (var joker in jokers)
+        {
+            var template = allJokers.FirstOrDefault(j => j.Name == joker.Name);
+            if (template != null)
+            {
+                joker.SimpleEffect = template.SimpleEffect;
+            }
+        }
+    }
 }

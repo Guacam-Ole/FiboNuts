@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace BalatroPoker.Models;
 
 public enum JokerPosition
@@ -13,6 +15,7 @@ public class Joker
     public string Description { get; set; } = "";
     public JokerPosition Position { get; set; }
     public int MinJokersRequired { get; set; } = 1;
+    [JsonIgnore]
     public Func<JokerContext, List<int>> SimpleEffect { get; set; } = null!;
 }
 

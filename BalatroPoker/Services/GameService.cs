@@ -22,24 +22,25 @@ public class GameService
             var gamesJson = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "balatro-poker-games");
             if (string.IsNullOrEmpty(gamesJson))
             {
-                Console.WriteLine($"[DEBUG] No games found in localStorage");
                 return new Dictionary<string, GameState>();
             }
                 
             var games = JsonSerializer.Deserialize<Dictionary<string, GameState>>(gamesJson) ?? new Dictionary<string, GameState>();
-            Console.WriteLine($"[DEBUG] Loaded {games.Count} games from localStorage");
             
-            // Log the game phases being loaded
+            // Restore joker effects after deserialization
             foreach (var game in games.Values)
             {
-                Console.WriteLine($"[DEBUG] Loaded game {game.GameId}: Phase={game.Phase}, Players={game.Players.Count}");
+                if (game.ActiveJokers.Any())
+                {
+                    JokerProcessor.RestoreJokerEffects(game.ActiveJokers);
+                }
             }
             
             return games;
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[ERROR] Failed to load from localStorage: {ex.Message}");
+            // Silent failure - return empty dictionary
             return new Dictionary<string, GameState>();
         }
     }
@@ -49,20 +50,11 @@ public class GameService
         try
         {
             var gamesJson = JsonSerializer.Serialize(games);
-            Console.WriteLine($"[DEBUG] Saving games to localStorage: {games.Count} games");
-            
-            // Log the game phases being saved
-            foreach (var game in games.Values)
-            {
-                Console.WriteLine($"[DEBUG] Saving game {game.GameId}: Phase={game.Phase}, Players={game.Players.Count}");
-            }
-            
             await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "balatro-poker-games", gamesJson);
-            Console.WriteLine($"[DEBUG] Successfully saved to localStorage");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[ERROR] Failed to save to localStorage: {ex.Message}");
+            // Silent failure for localStorage save
         }
     }
     

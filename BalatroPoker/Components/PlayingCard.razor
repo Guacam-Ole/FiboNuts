@@ -1,0 +1,175 @@
+@using BalatroPoker.Models
+
+<div class="playing-card @(Card.IsSelected ? "selected" : "")" @onclick="HandleClick" style="cursor: pointer;">
+    <svg width="120" height="170" viewBox="0 0 120 170" xmlns="http://www.w3.org/2000/svg" class="card-svg">
+        <!-- Card Background -->
+        <defs>
+            <linearGradient id="cardGradient-@Card.Value-@Card.Suit" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#f8f9fa;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#e9ecef;stop-opacity:1" />
+            </linearGradient>
+            <linearGradient id="cardSelected-@Card.Value-@Card.Suit" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#6366f1;stop-opacity:0.2" />
+                <stop offset="100%" style="stop-color:#4f46e5;stop-opacity:0.3" />
+            </linearGradient>
+        </defs>
+        
+        <!-- Card Border -->
+        <rect x="2" y="2" width="116" height="166" rx="8" ry="8" 
+              fill="@(Card.IsSelected ? $"url(#cardSelected-{Card.Value}-{Card.Suit})" : $"url(#cardGradient-{Card.Value}-{Card.Suit})")" 
+              stroke="@(Card.IsSelected ? "#6366f1" : "#dee2e6")" 
+              stroke-width="@(Card.IsSelected ? "3" : "2")" />
+        
+        <!-- Top Left Corner -->
+        <text x="12" y="25" font-family="Arial, sans-serif" font-size="16" font-weight="bold" 
+              fill="@GetCardColor()">@Card.DisplayValue</text>
+        <text x="12" y="45" font-family="Arial, sans-serif" font-size="20" 
+              fill="@GetCardColor()">@Card.SuitSymbol</text>
+        
+        <!-- Card Content -->
+        @if (IsFaceCard())
+        {
+            @RenderFaceCard()
+        }
+        else
+        {
+            @RenderNumberCard()
+        }
+        
+        <!-- Bottom Right Corner (Upside Down) -->
+        <g transform="rotate(180 108 145)">
+            <text x="108" y="160" font-family="Arial, sans-serif" font-size="16" font-weight="bold" 
+                  fill="@GetCardColor()">@Card.DisplayValue</text>
+            <text x="108" y="140" font-family="Arial, sans-serif" font-size="20" 
+                  fill="@GetCardColor()">@Card.SuitSymbol</text>
+        </g>
+        
+        <!-- Selection Glow Effect -->
+        @if (Card.IsSelected)
+        {
+            <rect x="0" y="0" width="120" height="170" rx="8" ry="8" 
+                  fill="none" stroke="#6366f1" stroke-width="4" opacity="0.8" />
+        }
+    </svg>
+</div>
+
+@code {
+    [Parameter] public Card Card { get; set; } = new();
+    [Parameter] public EventCallback<Card> OnClick { get; set; }
+    
+    private async Task HandleClick()
+    {
+        await OnClick.InvokeAsync(Card);
+    }
+    
+    private string GetCardColor()
+    {
+        return Card.IsRed ? "#dc2626" : "#1f2937";
+    }
+    
+    private bool IsFaceCard()
+    {
+        return !string.IsNullOrEmpty(Card.FaceType);
+    }
+    
+    private RenderFragment RenderFaceCard()
+    {
+        return @<g>
+            <!-- Face Card Illustration -->
+            <rect x="25" y="55" width="70" height="90" rx="8" ry="8" 
+                  fill="@(Card.IsRed ? "#fef2f2" : "#f8fafc")" 
+                  stroke="@GetCardColor()" stroke-width="2"/>
+            
+            <!-- Crown/Symbol -->
+            <text x="60" y="85" font-family="serif" font-size="24" font-weight="bold" 
+                  fill="@GetCardColor()" text-anchor="middle">@GetFaceSymbol()</text>
+            
+            <!-- Face Card Letter -->
+            <text x="60" y="115" font-family="serif" font-size="32" font-weight="bold" 
+                  fill="@GetCardColor()" text-anchor="middle">@Card.DisplayValue</text>
+            
+            <!-- Suit Symbol on Face -->
+            <text x="60" y="135" font-family="Arial, sans-serif" font-size="20" 
+                  fill="@GetCardColor()" text-anchor="middle">@Card.SuitSymbol</text>
+        </g>;
+    }
+    
+    private RenderFragment RenderNumberCard()
+    {
+        return @<g>
+            @{
+                var positions = GetSuitPositions();
+                for (int i = 0; i < positions.Count; i++)
+                {
+                    var pos = positions[i];
+                    var isUpsideDown = i >= Card.Value / 2 && Card.Value > 1;
+                    
+                    <g transform="@(isUpsideDown ? $"rotate(180 {pos.x} {pos.y})" : "")">
+                        <text x="@pos.x" y="@pos.y" font-family="Arial, sans-serif" font-size="18" 
+                              fill="@GetCardColor()" text-anchor="middle">@Card.SuitSymbol</text>
+                    </g>
+                }
+            }
+        </g>;
+    }
+    
+    private string GetFaceSymbol()
+    {
+        return Card.FaceType switch
+        {
+            "J" => "♔",
+            "Q" => "♕", 
+            "K" => "♚",
+            _ => "♛"
+        };
+    }
+    
+    private List<(int x, int y)> GetSuitPositions()
+    {
+        var positions = new List<(int x, int y)>();
+        
+        switch (Card.Value)
+        {
+            case 1: // Ace
+                positions.Add((60, 85));
+                break;
+            case 2:
+                positions.Add((60, 70));
+                positions.Add((60, 100));
+                break;
+            case 3:
+                positions.Add((60, 65));
+                positions.Add((60, 85));
+                positions.Add((60, 105));
+                break;
+            case 5:
+                positions.Add((45, 65));
+                positions.Add((75, 65));
+                positions.Add((60, 85));
+                positions.Add((45, 105));
+                positions.Add((75, 105));
+                break;
+            case 8:
+                positions.Add((45, 60));
+                positions.Add((75, 60));
+                positions.Add((45, 80));
+                positions.Add((75, 80));
+                positions.Add((60, 70));
+                positions.Add((60, 90));
+                positions.Add((45, 100));
+                positions.Add((75, 100));
+                break;
+            default: // For other values, arrange in grid
+                var count = Math.Min(Card.Value, 10);
+                for (int i = 0; i < count; i++)
+                {
+                    var row = i / 2;
+                    var col = i % 2;
+                    positions.Add((45 + col * 30, 65 + row * 15));
+                }
+                break;
+        }
+        
+        return positions;
+    }
+}
