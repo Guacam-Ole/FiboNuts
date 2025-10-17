@@ -1,7 +1,7 @@
 @using BalatroPoker.Models
 
 <div class="playing-card @(Card.IsSelected ? "selected" : "")" @onclick="HandleClick" style="cursor: pointer;">
-    <svg width="120" height="170" viewBox="0 0 120 170" xmlns="http://www.w3.org/2000/svg" class="card-svg">
+    <svg width="100" height="120" viewBox="0 0 120 170" xmlns="http://www.w3.org/2000/svg" class="card-svg">
         <!-- Card Background -->
         <defs>
             <linearGradient id="cardGradient-@Card.Value-@Card.Suit" x1="0%" y1="0%" x2="0%" y2="100%">

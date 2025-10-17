@@ -1,4 +1,6 @@
 ﻿@page "/"
+@using BalatroPoker.Services
+@using BalatroPoker.Models
 
 <PageTitle>Balatro Planning Poker</PageTitle>
 
@@ -62,6 +64,27 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- Joker Showcase -->
+            <div class="mt-5">
+                <h3>🎭 Available Jokers</h3>
+                <p class="text-muted mb-4">Here are all the jokers that can appear in your games:</p>
+                <div class="joker-showcase">
+                    @foreach (var joker in allJokers)
+                    {
+                        <JokerCard Joker="joker" />
+                    }
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+@code {
+    private List<Joker> allJokers = new();
+    
+    protected override void OnInitialized()
+    {
+        allJokers = JokerProcessor.GetAllJokers();
+    }
+}

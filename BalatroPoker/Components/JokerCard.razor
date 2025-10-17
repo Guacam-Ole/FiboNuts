@@ -1,7 +1,7 @@
 @using BalatroPoker.Models
 
 <div class="joker-card">
-    <svg width="100" height="140" viewBox="0 0 100 140" xmlns="http://www.w3.org/2000/svg" class="joker-svg">
+    <svg width="100" height="130" viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg" class="joker-svg">
         <!-- Joker Background -->
         <defs>
             <linearGradient id="jokerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -19,25 +19,20 @@
         </defs>
         
         <!-- Card Border with Glow -->
-        <rect x="2" y="2" width="96" height="136" rx="8" ry="8" 
+        <rect x="2" y="2" width="116" height="146" rx="8" ry="8" 
               fill="url(#jokerGradient)" 
               stroke="#fbbf24" 
               stroke-width="2" 
               filter="url(#glow)" />
         
         <!-- Joker Symbol -->
-        <text x="50" y="30" font-family="Arial, sans-serif" font-size="20" font-weight="bold" 
+        <text x="60" y="60" font-family="Arial, sans-serif" font-size="48" font-weight="bold" 
               fill="#fbbf24" text-anchor="middle">🃏</text>
         
         <!-- Joker Name -->
-        <text x="50" y="55" font-family="Arial, sans-serif" font-size="10" font-weight="bold" 
+        <text x="60" y="105" font-family="Arial, sans-serif" 
+              font-size="@(Joker.Name.Length > 12 ? "10" : "12")" font-weight="bold" 
               fill="#ffffff" text-anchor="middle">@Joker.Name</text>
-        
-        <!-- Position Badge -->
-        <rect x="5" y="115" width="90" height="20" rx="10" ry="10" 
-              fill="rgba(251, 191, 36, 0.8)" />
-        <text x="50" y="128" font-family="Arial, sans-serif" font-size="8" 
-              fill="#1f2937" text-anchor="middle">@Joker.Position</text>
     </svg>
     
     <div class="joker-description">

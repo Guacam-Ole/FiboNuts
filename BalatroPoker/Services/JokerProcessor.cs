@@ -12,172 +12,163 @@ public class JokerProcessor
         {
             new()
             {
-                Name = "The Multiplier",
-                Description = "Doubles all votes",
+                Name = "Joker",
+                Description = "Adds +4 to each vote",
                 Position = JokerPosition.Anywhere,
                 MinJokersRequired = 1,
-                SimpleEffect = context => context.Votes.Select(v => v * 2).ToList()
+                SimpleEffect = context => context.Votes.Select(v => v + 4).ToList()
             },
             new()
             {
-                Name = "The Incrementor", 
-                Description = "Add +5 to everyone",
+                Name = "Greedy Joker",
+                Description = "Each Diamond card gives +3 bonus",
                 Position = JokerPosition.Anywhere,
                 MinJokersRequired = 1,
-                SimpleEffect = context => context.Votes.Select(v => v + 5).ToList()
+                SimpleEffect = context => ApplyCardSuitBonus(context, Suit.Diamonds, 3)
             },
             new()
             {
-                Name = "The Halver",
-                Description = "Cut everything in half",
+                Name = "Lusty Joker",
+                Description = "Each Heart gives +3 bonus",
                 Position = JokerPosition.Anywhere,
                 MinJokersRequired = 1,
-                SimpleEffect = context => context.Votes.Select(v => Math.Max(1, v / 2)).ToList()
+                SimpleEffect = context => ApplyCardSuitBonus(context, Suit.Hearts, 3)
             },
             new()
             {
-                Name = "The Minimalist",
-                Description = "Everyone gets minimum",
+                Name = "Wrathful Joker",
+                Description = "Each Spade gives +3 bonus",
                 Position = JokerPosition.Anywhere,
                 MinJokersRequired = 1,
-                SimpleEffect = context => context.Votes.Select(_ => context.Min).ToList()
+                SimpleEffect = context => ApplyCardSuitBonus(context, Suit.Spades, 3)
             },
             new()
             {
-                Name = "The Maximalist",
-                Description = "Everyone gets maximum", 
+                Name = "Gluttonous Joker",
+                Description = "Each Club gives +3 bonus",
                 Position = JokerPosition.Anywhere,
                 MinJokersRequired = 1,
-                SimpleEffect = context => context.Votes.Select(_ => context.Max).ToList()
+                SimpleEffect = context => ApplyCardSuitBonus(context, Suit.Clubs, 3)
             },
             new()
             {
-                Name = "The Equalizer",
-                Description = "Everyone gets average",
+                Name = "Misprint",
+                Description = "Random bonus between 1 and 23",
                 Position = JokerPosition.Anywhere,
                 MinJokersRequired = 1,
-                SimpleEffect = context => context.Votes.Select(_ => (int)Math.Round(context.Average)).ToList()
+                SimpleEffect = context => context.Votes.Select(v => v + _random.Next(1, 24)).ToList()
             },
             new()
             {
-                Name = "The Anarchist",
-                Description = "All votes become random",
+                Name = "Fibonacci",
+                Description = "Each card gives +8 bonus",
                 Position = JokerPosition.Anywhere,
                 MinJokersRequired = 1,
-                SimpleEffect = context => context.Votes.Select(_ => GameState.FibonacciValues[_random.Next(GameState.FibonacciValues.Length)]).ToList()
+                SimpleEffect = context => ApplyCardCountBonus(context, 8)
             },
             new()
             {
-                Name = "The Fibonacci Lover",
-                Description = "Round to nearest Fibonacci",
+                Name = "Scary Face",
+                Description = "Each face card gives +30 points",
                 Position = JokerPosition.Anywhere,
                 MinJokersRequired = 1,
-                SimpleEffect = context => context.Votes.Select(v => GetNearestFibonacci(v)).ToList()
+                SimpleEffect = context => ApplyFaceCardBonus(context, 30)
             },
             new()
             {
-                Name = "The Chaos",
-                Description = "Multiply by random 1-3",
+                Name = "Abstract Joker",
+                Description = "+3 for each active joker",
                 Position = JokerPosition.Anywhere,
                 MinJokersRequired = 1,
-                SimpleEffect = context => context.Votes.Select(v => v * _random.Next(1, 4)).ToList()
+                SimpleEffect = context => context.Votes.Select(v => v + (context.ActiveJokers.Count * 3)).ToList()
             },
             new()
             {
-                Name = "The Inverter",
-                Description = "34 minus your vote",
+                Name = "Hack",
+                Description = "2, 3, and 5 count twice",
                 Position = JokerPosition.Anywhere,
                 MinJokersRequired = 1,
-                SimpleEffect = context => context.Votes.Select(v => Math.Max(1, 34 - v)).ToList()
+                SimpleEffect = context => ApplySpecificValueDoubling(context, new[] { 2, 3, 5 })
             },
             new()
             {
-                Name = "The Square Root",
-                Description = "Square root of all votes",
+                Name = "Gros Michel",
+                Description = "+15 bonus to all votes",
                 Position = JokerPosition.Anywhere,
                 MinJokersRequired = 1,
-                SimpleEffect = context => context.Votes.Select(v => Math.Max(1, (int)Math.Round(Math.Sqrt(v)))).ToList()
+                SimpleEffect = context => context.Votes.Select(v => v + 15).ToList()
             },
             new()
             {
-                Name = "The Reverser",
-                Description = "Swap highest and lowest",
+                Name = "Even Steven",
+                Description = "2 and 8 give +4 bonus",
                 Position = JokerPosition.Anywhere,
-                MinJokersRequired = 2,
-                SimpleEffect = context =>
-                {
-                    var votes = context.Votes.ToList();
-                    var min = context.Min;
-                    var max = context.Max;
-                    return votes.Select(v => v == min ? max : v == max ? min : v).ToList();
-                }
+                MinJokersRequired = 1,
+                SimpleEffect = context => ApplySpecificValueBonus(context, new[] { 2, 8 }, 4)
             },
             new()
             {
-                Name = "The Copycat",
-                Description = "Copies the right joker's effect",
-                Position = JokerPosition.Left,
-                MinJokersRequired = 2,
-                SimpleEffect = context =>
-                {
-                    var rightJokerIndex = context.CurrentJokerIndex + 1;
-                    if (rightJokerIndex < context.ActiveJokers.Count)
-                    {
-                        var rightJoker = context.ActiveJokers[rightJokerIndex];
-                        return rightJoker.SimpleEffect(context);
-                    }
-                    return context.Votes;
-                }
+                Name = "Odd Todd",
+                Description = "Odd cards give +31 points",
+                Position = JokerPosition.Anywhere,
+                MinJokersRequired = 1,
+                SimpleEffect = context => ApplyOddCardBonus(context, 31)
             },
             new()
             {
-                Name = "The Mirror",
-                Description = "Applies left joker's effect twice",
+                Name = "Scholar",
+                Description = "Aces give +20 points and multiply by 4",
+                Position = JokerPosition.Anywhere,
+                MinJokersRequired = 1,
+                SimpleEffect = context => ApplyAceBonus(context)
+            },
+            new()
+            {
+                Name = "Photograph",
+                Description = "First face card multiplied by 2",
+                Position = JokerPosition.Anywhere,
+                MinJokersRequired = 1,
+                SimpleEffect = context => ApplyFirstFaceCardMultiplier(context)
+            },
+            new()
+            {
+                Name = "Popcorn",
+                Description = "+20 bonus to all votes",
+                Position = JokerPosition.Anywhere,
+                MinJokersRequired = 1,
+                SimpleEffect = context => context.Votes.Select(v => v + 20).ToList()
+            },
+            new()
+            {
+                Name = "Sock and Buscin",
+                Description = "Face cards count twice",
+                Position = JokerPosition.Anywhere,
+                MinJokersRequired = 1,
+                SimpleEffect = context => ApplyFaceCardDoubling(context)
+            },
+            new()
+            {
+                Name = "Hanging Chad",
+                Description = "First card played three times",
+                Position = JokerPosition.Anywhere,
+                MinJokersRequired = 1,
+                SimpleEffect = context => ApplyFirstCardTripling(context)
+            },
+            new()
+            {
+                Name = "Brainstorm",
+                Description = "Copies the leftmost joker",
                 Position = JokerPosition.Right,
                 MinJokersRequired = 2,
-                SimpleEffect = context =>
-                {
-                    var leftJokerIndex = context.CurrentJokerIndex - 1;
-                    if (leftJokerIndex >= 0)
-                    {
-                        var leftJoker = context.ActiveJokers[leftJokerIndex];
-                        var firstPass = leftJoker.SimpleEffect(context);
-                        var newContext = new JokerContext 
-                        { 
-                            Votes = firstPass, 
-                            Players = context.Players,
-                            ActiveJokers = context.ActiveJokers,
-                            CurrentJokerIndex = context.CurrentJokerIndex,
-                            Random = context.Random
-                        };
-                        return leftJoker.SimpleEffect(newContext);
-                    }
-                    return context.Votes;
-                }
+                SimpleEffect = context => CopyLeftmostJoker(context)
             },
             new()
             {
-                Name = "The Median Seeker",
-                Description = "Votes > median become median",
-                Position = JokerPosition.Anywhere,
+                Name = "Blueprint",
+                Description = "Copies ability of joker to the right",
+                Position = JokerPosition.Left,
                 MinJokersRequired = 2,
-                SimpleEffect = context => context.Votes.Select(v => v > context.Median ? context.Median : v).ToList()
-            },
-            new()
-            {
-                Name = "The Pessimist",
-                Description = "Add highest vote to everyone",
-                Position = JokerPosition.Anywhere,
-                MinJokersRequired = 2,
-                SimpleEffect = context => context.Votes.Select(v => v + context.Max).ToList()
-            },
-            new()
-            {
-                Name = "The Duplicator",
-                Description = "Lowest vote gets doubled",
-                Position = JokerPosition.Anywhere,
-                MinJokersRequired = 2,
-                SimpleEffect = context => context.Votes.Select(v => v == context.Min ? v * 2 : v).ToList()
+                SimpleEffect = context => CopyRightJoker(context)
             }
         };
     }
@@ -261,5 +252,167 @@ public class JokerProcessor
                 joker.SimpleEffect = template.SimpleEffect;
             }
         }
+    }
+    
+    // Helper methods for new joker effects
+    private static List<int> ApplyCardSuitBonus(JokerContext context, Suit targetSuit, int bonus)
+    {
+        var result = new List<int>();
+        for (int i = 0; i < context.Votes.Count; i++)
+        {
+            var player = context.Players[i];
+            var suitCount = player.SelectedCards.Count(c => c.Suit == targetSuit);
+            result.Add(context.Votes[i] + (suitCount * bonus));
+        }
+        return result;
+    }
+    
+    private static List<int> ApplyCardCountBonus(JokerContext context, int bonusPerCard)
+    {
+        var result = new List<int>();
+        for (int i = 0; i < context.Votes.Count; i++)
+        {
+            var player = context.Players[i];
+            var cardCount = player.SelectedCards.Count;
+            result.Add(context.Votes[i] + (cardCount * bonusPerCard));
+        }
+        return result;
+    }
+    
+    private static List<int> ApplyFaceCardBonus(JokerContext context, int bonus)
+    {
+        var result = new List<int>();
+        for (int i = 0; i < context.Votes.Count; i++)
+        {
+            var player = context.Players[i];
+            var faceCardCount = player.SelectedCards.Count(c => !string.IsNullOrEmpty(c.FaceType));
+            result.Add(context.Votes[i] + (faceCardCount * bonus));
+        }
+        return result;
+    }
+    
+    private static List<int> ApplySpecificValueDoubling(JokerContext context, int[] targetValues)
+    {
+        var result = new List<int>();
+        for (int i = 0; i < context.Votes.Count; i++)
+        {
+            var player = context.Players[i];
+            var doubleValue = 0;
+            foreach (var card in player.SelectedCards)
+            {
+                if (targetValues.Contains(card.Value))
+                {
+                    doubleValue += card.Value; // Add the card value again (double it)
+                }
+            }
+            result.Add(context.Votes[i] + doubleValue);
+        }
+        return result;
+    }
+    
+    private static List<int> ApplySpecificValueBonus(JokerContext context, int[] targetValues, int bonus)
+    {
+        var result = new List<int>();
+        for (int i = 0; i < context.Votes.Count; i++)
+        {
+            var player = context.Players[i];
+            var matchingCardCount = player.SelectedCards.Count(c => targetValues.Contains(c.Value));
+            result.Add(context.Votes[i] + (matchingCardCount * bonus));
+        }
+        return result;
+    }
+    
+    private static List<int> ApplyOddCardBonus(JokerContext context, int bonus)
+    {
+        var result = new List<int>();
+        for (int i = 0; i < context.Votes.Count; i++)
+        {
+            var player = context.Players[i];
+            var oddCardCount = player.SelectedCards.Count(c => c.Value % 2 == 1);
+            result.Add(context.Votes[i] + (oddCardCount * bonus));
+        }
+        return result;
+    }
+    
+    private static List<int> ApplyAceBonus(JokerContext context)
+    {
+        var result = new List<int>();
+        for (int i = 0; i < context.Votes.Count; i++)
+        {
+            var player = context.Players[i];
+            var aceCount = player.SelectedCards.Count(c => c.Value == 1);
+            var aceBonus = aceCount * 20; // +20 points per ace
+            var aceMultiplier = aceCount > 0 ? 4 : 1; // multiply by 4 if aces present
+            result.Add((context.Votes[i] + aceBonus) * aceMultiplier);
+        }
+        return result;
+    }
+    
+    private static List<int> ApplyFirstFaceCardMultiplier(JokerContext context)
+    {
+        var result = new List<int>();
+        for (int i = 0; i < context.Votes.Count; i++)
+        {
+            var player = context.Players[i];
+            var firstFaceCard = player.SelectedCards.FirstOrDefault(c => !string.IsNullOrEmpty(c.FaceType));
+            var multiplier = firstFaceCard != null ? 2 : 1;
+            result.Add(context.Votes[i] * multiplier);
+        }
+        return result;
+    }
+    
+    private static List<int> ApplyFaceCardDoubling(JokerContext context)
+    {
+        var result = new List<int>();
+        for (int i = 0; i < context.Votes.Count; i++)
+        {
+            var player = context.Players[i];
+            var faceCardValue = player.SelectedCards.Where(c => !string.IsNullOrEmpty(c.FaceType)).Sum(c => c.Value);
+            result.Add(context.Votes[i] + faceCardValue); // Add face card values again (double them)
+        }
+        return result;
+    }
+    
+    private static List<int> ApplyFirstCardTripling(JokerContext context)
+    {
+        var result = new List<int>();
+        for (int i = 0; i < context.Votes.Count; i++)
+        {
+            var player = context.Players[i];
+            if (player.SelectedCards.Any())
+            {
+                var firstCardValue = player.SelectedCards.First().Value;
+                result.Add(context.Votes[i] + (firstCardValue * 2)); // Add twice more (triple total)
+            }
+            else
+            {
+                result.Add(context.Votes[i]);
+            }
+        }
+        return result;
+    }
+    
+    private static List<int> CopyLeftmostJoker(JokerContext context)
+    {
+        if (context.ActiveJokers.Any())
+        {
+            var leftmostJoker = context.ActiveJokers.First();
+            if (leftmostJoker != context.ActiveJokers[context.CurrentJokerIndex])
+            {
+                return leftmostJoker.SimpleEffect(context);
+            }
+        }
+        return context.Votes;
+    }
+    
+    private static List<int> CopyRightJoker(JokerContext context)
+    {
+        var rightJokerIndex = context.CurrentJokerIndex + 1;
+        if (rightJokerIndex < context.ActiveJokers.Count)
+        {
+            var rightJoker = context.ActiveJokers[rightJokerIndex];
+            return rightJoker.SimpleEffect(context);
+        }
+        return context.Votes;
     }
 }

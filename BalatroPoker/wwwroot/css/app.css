@@ -119,9 +119,10 @@ code {
 /* Playing Card Component */
 .playing-card {
     display: inline-block;
-    margin: 8px;
+    margin: 4px;
     transition: all 0.3s ease;
     filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+    flex-shrink: 0;
 }
 
 .playing-card:hover {
@@ -163,14 +164,27 @@ code {
 /* Playing Cards Layout */
 .playing-cards-container {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: center;
-    gap: 10px;
+    gap: 8px;
     margin: 20px 0;
-    padding: 20px;
+    padding: 15px;
     background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(147, 51, 234, 0.1));
     border-radius: 12px;
     border: 2px solid rgba(124, 58, 237, 0.3);
+    overflow-x: auto;
+}
+
+/* Responsive adjustments for playing cards */
+@media (max-width: 768px) {
+    .playing-cards-container {
+        gap: 4px;
+        padding: 8px;
+    }
+    
+    .playing-card {
+        margin: 1px;
+    }
 }
 
 /* Joker Placeholders */
@@ -424,4 +438,17 @@ code {
     background-color: rgba(30, 30, 60, 0.9) !important;
     color: #ffffff !important;
     opacity: 1;
+}
+
+/* Joker Showcase */
+.joker-showcase {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    justify-items: center;
+    margin: 20px 0;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(147, 51, 234, 0.1));
+    border-radius: 12px;
+    border: 2px solid rgba(124, 58, 237, 0.3);
 }
