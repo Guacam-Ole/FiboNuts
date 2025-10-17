@@ -43,20 +43,49 @@ else if (currentPlayer == null)
 }
 else
 {
-    <div class="container mt-4">
+    <div class="container-fluid mt-4">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-12">
                 <h1>🃏 Balatro Planning Poker</h1>
                 <h4 class="text-muted mb-4">Welcome, @currentPlayer.Name!</h4>
                 
-                <div class="card mb-4">
-                    <div class="card-body">
-                        <h5>Allowed Values</h5>
-                        <div class="d-flex gap-2 flex-wrap">
-                            @foreach (var value in game.AllowedValues)
-                            {
-                                <span class="badge bg-primary fs-6">@value</span>
-                            }
+                <!-- Player Info and Allowed Values in horizontal layout -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5>Allowed Values</h5>
+                                <div class="d-flex gap-2 flex-wrap">
+                                    @foreach (var value in game.AllowedValues)
+                                    {
+                                        <span class="badge bg-primary fs-6">@value</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5>Players (@game.Players.Count)</h5>
+                                <div class="d-flex gap-2 flex-wrap">
+                                    @foreach (var player in game.Players)
+                                    {
+                                        <span class="badge @(player.HasVoted ? "bg-success" : "bg-warning") @(player.Id == currentPlayer.Id ? "border border-primary" : "")" style="font-size: 0.9em;">
+                                            @player.Name @(player.Id == currentPlayer.Id ? "(You)" : "") @(player.HasVoted ? "✓" : "...")
+                                        </span>
+                                    }
+                                </div>
+                                @if (game.Phase == GamePhase.Voting)
+                                {
+                                    <div class="mt-2">
+                                        <div class="progress" style="height: 6px;">
+                                            <div class="progress-bar" style="width: @((game.Players.Count > 0 ? (double)game.Players.Count(p => p.HasVoted) / game.Players.Count * 100 : 0).ToString("F0"))%"></div>
+                                        </div>
+                                        <small class="text-muted">@game.Players.Count(p => p.HasVoted) of @game.Players.Count voted</small>
+                                    </div>
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -218,41 +247,6 @@ else
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                }
-            </div>
-            
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5>Players (@game.Players.Count)</h5>
-                        @foreach (var player in game.Players)
-                        {
-                            <div class="d-flex justify-content-between align-items-center mb-2 p-2 border rounded">
-                                <span class="@(player.Id == currentPlayer.Id ? "fw-bold" : "")">
-                                    @player.Name
-                                    @if (player.Id == currentPlayer.Id) { <small>(You)</small> }
-                                </span>
-                                <span class="badge @(player.HasVoted ? "bg-success" : "bg-warning")">
-                                    @(player.HasVoted ? "✓" : "...")
-                                </span>
-                            </div>
-                        }
-                    </div>
-                </div>
-                
-                @if (game.Phase == GamePhase.Voting)
-                {
-                    <div class="card mt-3">
-                        <div class="card-body">
-                            <h6>Voting Progress</h6>
-                            <div class="progress">
-                                <div class="progress-bar" style="width: @((game.Players.Count > 0 ? (double)game.Players.Count(p => p.HasVoted) / game.Players.Count * 100 : 0).ToString("F0"))%"></div>
-                            </div>
-                            <small class="text-muted">
-                                @game.Players.Count(p => p.HasVoted) of @game.Players.Count voted
-                            </small>
                         </div>
                     </div>
                 }
