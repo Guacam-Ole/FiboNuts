@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  
+  <!-- Common UI Elements -->
+  <data name="AppTitle" xml:space="preserve">
+    <value>Balatro Planning Poker</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Bienvenido</value>
+  </data>
+  <data name="Players" xml:space="preserve">
+    <value>Jugadores</value>
+  </data>
+  <data name="AllowedValues" xml:space="preserve">
+    <value>Valores Permitidos</value>
+  </data>
+  <data name="Jokers" xml:space="preserve">
+    <value>Comodines</value>
+  </data>
+  <data name="AvailableJokers" xml:space="preserve">
+    <value>Comodines Disponibles</value>
+  </data>
+  <data name="RevealedJokers" xml:space="preserve">
+    <value>¡Comodines Revelados!</value>
+  </data>
+  
+  <!-- Game Actions -->
+  <data name="CreateGame" xml:space="preserve">
+    <value>Crear Partida</value>
+  </data>
+  <data name="JoinGame" xml:space="preserve">
+    <value>Unirse a Partida</value>
+  </data>
+  <data name="StartVoting" xml:space="preserve">
+    <value>Iniciar Votación</value>
+  </data>
+  <data name="RevealCards" xml:space="preserve">
+    <value>Revelar Cartas &amp; Aplicar Comodines</value>
+  </data>
+  <data name="NewRound" xml:space="preserve">
+    <value>Nueva Ronda</value>
+  </data>
+  <data name="ConfirmVote" xml:space="preserve">
+    <value>Confirmar Voto</value>
+  </data>
+  <data name="VoteSubmitted" xml:space="preserve">
+    <value>¡Voto Enviado!</value>
+  </data>
+  
+  <!-- Game Status -->
+  <data name="CurrentSum" xml:space="preserve">
+    <value>Suma Actual</value>
+  </data>
+  <data name="YourVote" xml:space="preserve">
+    <value>Su voto</value>
+  </data>
+  <data name="VotingProgress" xml:space="preserve">
+    <value>Progreso de Votación</value>
+  </data>
+  <data name="VotingResults" xml:space="preserve">
+    <value>Resultados de Votación</value>
+  </data>
+  <data name="VotingEnded" xml:space="preserve">
+    <value>¡Votación Finalizada!</value>
+  </data>
+  <data name="FinalValues" xml:space="preserve">
+    <value>Valores Finales</value>
+  </data>
+  <data name="TeamStatistics" xml:space="preserve">
+    <value>Estadísticas del Equipo</value>
+  </data>
+  <data name="Average" xml:space="preserve">
+    <value>Promedio</value>
+  </data>
+  <data name="Minimum" xml:space="preserve">
+    <value>Mín</value>
+  </data>
+  <data name="Maximum" xml:space="preserve">
+    <value>Máx</value>
+  </data>
+  
+  <!-- Forms -->
+  <data name="YourName" xml:space="preserve">
+    <value>Su Nombre</value>
+  </data>
+  <data name="JokerCount" xml:space="preserve">
+    <value>Número de Comodines</value>
+  </data>
+  <data name="GameSettings" xml:space="preserve">
+    <value>Configuración de Partida</value>
+  </data>
+  
+  <!-- Messages -->
+  <data name="MustMatchAllowedValue" xml:space="preserve">
+    <value>Debe coincidir con un valor permitido</value>
+  </data>
+  <data name="SelectCardsToReachValue" xml:space="preserve">
+    <value>Seleccione cartas para combinar y alcanzar un valor permitido</value>
+  </data>
+  <data name="JokersWillBeDrawn" xml:space="preserve">
+    <value>Se robarán {0} comodín(es) después de la votación</value>
+  </data>
+  <data name="PlayersVoted" xml:space="preserve">
+    <value>{0} de {1} votaron</value>
+  </data>
+  
+  <!-- Roles -->
+  <data name="ProductOwner" xml:space="preserve">
+    <value>Propietario del Producto</value>
+  </data>
+  <data name="Player" xml:space="preserve">
+    <value>Jugador</value>
+  </data>
+  <data name="You" xml:space="preserve">
+    <value>Usted</value>
+  </data>
+  
+  <!-- How It Works -->
+  <data name="HowItWorks" xml:space="preserve">
+    <value>Cómo Funciona</value>
+  </data>
+  <data name="SelectCards" xml:space="preserve">
+    <value>Seleccionar Cartas</value>
+  </data>
+  <data name="SelectCardsDesc" xml:space="preserve">
+    <value>Combine cartas de juego (2,3,5,8,J,Q,K,A) para alcanzar valores de Fibonacci permitidos</value>
+  </data>
+  <data name="RandomJokers" xml:space="preserve">
+    <value>Comodines Aleatorios</value>
+  </data>
+  <data name="RandomJokersDesc" xml:space="preserve">
+    <value>Los comodines aparecen y transforman los votos de maneras inesperadas - ¡como en Balatro!</value>
+  </data>
+  <data name="FinalResults" xml:space="preserve">
+    <value>Resultados Finales</value>
+  </data>
+  <data name="FinalResultsDesc" xml:space="preserve">
+    <value>Vea los votos originales vs transformados y las estadísticas del equipo</value>
+  </data>
+  
+  <!-- Descriptions -->
+  <data name="ProductOwnerDesc" xml:space="preserve">
+    <value>Cree y gestione sesiones de planning poker con configuraciones personalizables y monitoreo en tiempo real.</value>
+  </data>
+  <data name="PlayerDesc" xml:space="preserve">
+    <value>Únase a una sesión de planning poker con su código único de jugador y comience a votar con cartas!</value>
+  </data>
+  <data name="GetPlayerUrl" xml:space="preserve">
+    <value>Obtenga la URL del jugador de su Propietario del Producto</value>
+  </data>
+  <data name="AppDescription" xml:space="preserve">
+    <value>Planning poker con mecánicas de cartas al estilo Balatro y comodines que transforman sus votos!</value>
+  </data>
+  <data name="JokersShowcaseDesc" xml:space="preserve">
+    <value>Aquí están todos los comodines que pueden aparecer en sus partidas:</value>
+  </data>
+  
+  <!-- Errors -->
+  <data name="GameNotFound" xml:space="preserve">
+    <value>Partida No Encontrada</value>
+  </data>
+  <data name="InvalidPlayerCode" xml:space="preserve">
+    <value>Código de jugador inválido. Por favor verifique su URL.</value>
+  </data>
+  
+  <!-- Cards -->
+  <data name="YourHand" xml:space="preserve">
+    <value>Su Mano</value>
+  </data>
+</root>

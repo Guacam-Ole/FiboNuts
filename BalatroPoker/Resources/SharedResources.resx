@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  
+  <!-- Common UI Elements -->
+  <data name="AppTitle" xml:space="preserve">
+    <value>Balatro Planning Poker</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Welcome</value>
+  </data>
+  <data name="Players" xml:space="preserve">
+    <value>Players</value>
+  </data>
+  <data name="AllowedValues" xml:space="preserve">
+    <value>Allowed Values</value>
+  </data>
+  <data name="Jokers" xml:space="preserve">
+    <value>Jokers</value>
+  </data>
+  <data name="AvailableJokers" xml:space="preserve">
+    <value>Available Jokers</value>
+  </data>
+  <data name="RevealedJokers" xml:space="preserve">
+    <value>Jokers Revealed!</value>
+  </data>
+  
+  <!-- Game Actions -->
+  <data name="CreateGame" xml:space="preserve">
+    <value>Create Game</value>
+  </data>
+  <data name="JoinGame" xml:space="preserve">
+    <value>Join Game</value>
+  </data>
+  <data name="StartVoting" xml:space="preserve">
+    <value>Start Voting</value>
+  </data>
+  <data name="RevealCards" xml:space="preserve">
+    <value>Reveal Cards &amp; Apply Jokers</value>
+  </data>
+  <data name="NewRound" xml:space="preserve">
+    <value>New Round</value>
+  </data>
+  <data name="ConfirmVote" xml:space="preserve">
+    <value>Confirm Vote</value>
+  </data>
+  <data name="VoteSubmitted" xml:space="preserve">
+    <value>Vote Submitted!</value>
+  </data>
+  
+  <!-- Game Status -->
+  <data name="CurrentSum" xml:space="preserve">
+    <value>Current Sum</value>
+  </data>
+  <data name="YourVote" xml:space="preserve">
+    <value>Your vote</value>
+  </data>
+  <data name="VotingProgress" xml:space="preserve">
+    <value>Voting Progress</value>
+  </data>
+  <data name="VotingResults" xml:space="preserve">
+    <value>Voting Results</value>
+  </data>
+  <data name="VotingEnded" xml:space="preserve">
+    <value>Voting Ended!</value>
+  </data>
+  <data name="FinalValues" xml:space="preserve">
+    <value>Final Values</value>
+  </data>
+  <data name="TeamStatistics" xml:space="preserve">
+    <value>Team Statistics</value>
+  </data>
+  <data name="Average" xml:space="preserve">
+    <value>Average</value>
+  </data>
+  <data name="Minimum" xml:space="preserve">
+    <value>Min</value>
+  </data>
+  <data name="Maximum" xml:space="preserve">
+    <value>Max</value>
+  </data>
+  
+  <!-- Forms -->
+  <data name="YourName" xml:space="preserve">
+    <value>Your Name</value>
+  </data>
+  <data name="JokerCount" xml:space="preserve">
+    <value>Number of Jokers</value>
+  </data>
+  <data name="GameSettings" xml:space="preserve">
+    <value>Game Settings</value>
+  </data>
+  
+  <!-- Messages -->
+  <data name="MustMatchAllowedValue" xml:space="preserve">
+    <value>Must match an allowed value</value>
+  </data>
+  <data name="SelectCardsToReachValue" xml:space="preserve">
+    <value>Select cards to combine and reach an allowed value</value>
+  </data>
+  <data name="JokersWillBeDrawn" xml:space="preserve">
+    <value>{0} joker(s) will be drawn after voting</value>
+  </data>
+  <data name="PlayersVoted" xml:space="preserve">
+    <value>{0} of {1} voted</value>
+  </data>
+  
+  <!-- Roles -->
+  <data name="ProductOwner" xml:space="preserve">
+    <value>Product Owner</value>
+  </data>
+  <data name="Player" xml:space="preserve">
+    <value>Player</value>
+  </data>
+  <data name="You" xml:space="preserve">
+    <value>You</value>
+  </data>
+  
+  <!-- How It Works -->
+  <data name="HowItWorks" xml:space="preserve">
+    <value>How It Works</value>
+  </data>
+  <data name="SelectCards" xml:space="preserve">
+    <value>Select Cards</value>
+  </data>
+  <data name="SelectCardsDesc" xml:space="preserve">
+    <value>Combine playing cards (2,3,5,8,J,Q,K,A) to reach allowed Fibonacci values</value>
+  </data>
+  <data name="RandomJokers" xml:space="preserve">
+    <value>Random Jokers</value>
+  </data>
+  <data name="RandomJokersDesc" xml:space="preserve">
+    <value>Jokers appear and transform votes in unexpected ways - just like Balatro!</value>
+  </data>
+  <data name="FinalResults" xml:space="preserve">
+    <value>Final Results</value>
+  </data>
+  <data name="FinalResultsDesc" xml:space="preserve">
+    <value>See original vs transformed votes and team statistics</value>
+  </data>
+  
+  <!-- Descriptions -->
+  <data name="ProductOwnerDesc" xml:space="preserve">
+    <value>Create and manage planning poker sessions with customizable settings and real-time monitoring.</value>
+  </data>
+  <data name="PlayerDesc" xml:space="preserve">
+    <value>Join a planning poker session with your unique player code and start voting with cards!</value>
+  </data>
+  <data name="GetPlayerUrl" xml:space="preserve">
+    <value>Get the player URL from your Product Owner</value>
+  </data>
+  <data name="AppDescription" xml:space="preserve">
+    <value>Planning poker with Balatro-style card mechanics and jokers that transform your votes!</value>
+  </data>
+  <data name="JokersShowcaseDesc" xml:space="preserve">
+    <value>Here are all the jokers that can appear in your games:</value>
+  </data>
+  
+  <!-- Errors -->
+  <data name="GameNotFound" xml:space="preserve">
+    <value>Game Not Found</value>
+  </data>
+  <data name="InvalidPlayerCode" xml:space="preserve">
+    <value>Invalid player code. Please check your URL.</value>
+  </data>
+  
+  <!-- Cards -->
+  <data name="YourHand" xml:space="preserve">
+    <value>Your Hand</value>
+  </data>
+</root>

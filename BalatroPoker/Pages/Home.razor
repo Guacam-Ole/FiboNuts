@@ -1,22 +1,31 @@
 ﻿@page "/"
 @using BalatroPoker.Services
 @using BalatroPoker.Models
+@using BalatroPoker.Resources
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<SharedResources> Localizer
+@inject LocalizationService LocalizationService
 
-<PageTitle>Balatro Planning Poker</PageTitle>
+<PageTitle>@Localizer["AppTitle"]</PageTitle>
 
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8 text-center">
-            <h1 class="display-4 mb-4">🃏 Balatro Planning Poker</h1>
-            <p class="lead mb-5">Planning poker with Balatro-style card mechanics and jokers that transform your votes!</p>
+            <!-- Language Selector -->
+            <div class="d-flex justify-content-end mb-3">
+                <LanguageSelector OnLanguageChanged="OnLanguageChanged" />
+            </div>
+            
+            <h1 class="display-4 mb-4">🃏 @Localizer["AppTitle"]</h1>
+            <p class="lead mb-5">@Localizer["AppDescription"]</p>
             
             <div class="row">
                 <div class="col-md-6 mb-4">
                     <div class="card h-100 border-primary">
                         <div class="card-body">
-                            <h5 class="card-title">🎯 Product Owner</h5>
-                            <p class="card-text">Create and manage planning poker sessions with customizable settings and real-time monitoring.</p>
-                            <a href="/create" class="btn btn-primary btn-lg">Create Game</a>
+                            <h5 class="card-title">🎯 @Localizer["ProductOwner"]</h5>
+                            <p class="card-text">@Localizer["ProductOwnerDesc"]</p>
+                            <a href="/create" class="btn btn-primary btn-lg">@Localizer["CreateGame"]</a>
                         </div>
                     </div>
                 </div>
@@ -24,24 +33,24 @@
                 <div class="col-md-6 mb-4">
                     <div class="card h-100 border-success">
                         <div class="card-body">
-                            <h5 class="card-title">👥 Player</h5>
-                            <p class="card-text">Join a planning poker session with your unique player code and start voting with cards!</p>
-                            <p class="text-muted">Get the player URL from your Product Owner</p>
+                            <h5 class="card-title">👥 @Localizer["Player"]</h5>
+                            <p class="card-text">@Localizer["PlayerDesc"]</p>
+                            <p class="text-muted">@Localizer["GetPlayerUrl"]</p>
                         </div>
                     </div>
                 </div>
             </div>
             
             <div class="mt-5">
-                <h3>How It Works</h3>
+                <h3>@Localizer["HowItWorks"]</h3>
                 <div class="row mt-4">
                     <div class="col-md-4">
                         <div class="text-center">
                             <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
                                 <span class="h4 mb-0">🎴</span>
                             </div>
-                            <h6 class="mt-3">Select Cards</h6>
-                            <p class="small text-muted">Combine playing cards (2,3,5,8,J,Q,K,A) to reach allowed Fibonacci values</p>
+                            <h6 class="mt-3">@Localizer["SelectCards"]</h6>
+                            <p class="small text-muted">@Localizer["SelectCardsDesc"]</p>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -49,8 +58,8 @@
                             <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
                                 <span class="h4 mb-0">🎭</span>
                             </div>
-                            <h6 class="mt-3">Random Jokers</h6>
-                            <p class="small text-muted">Jokers appear and transform votes in unexpected ways - just like Balatro!</p>
+                            <h6 class="mt-3">@Localizer["RandomJokers"]</h6>
+                            <p class="small text-muted">@Localizer["RandomJokersDesc"]</p>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -58,8 +67,8 @@
                             <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
                                 <span class="h4 mb-0">📊</span>
                             </div>
-                            <h6 class="mt-3">Final Results</h6>
-                            <p class="small text-muted">See original vs transformed votes and team statistics</p>
+                            <h6 class="mt-3">@Localizer["FinalResults"]</h6>
+                            <p class="small text-muted">@Localizer["FinalResultsDesc"]</p>
                         </div>
                     </div>
                 </div>
@@ -67,8 +76,8 @@
             
             <!-- Joker Showcase -->
             <div class="mt-5">
-                <h3>🎭 Available Jokers</h3>
-                <p class="text-muted mb-4">Here are all the jokers that can appear in your games:</p>
+                <h3>🎭 @Localizer["AvailableJokers"]</h3>
+                <p class="text-muted mb-4">@Localizer["JokersShowcaseDesc"]</p>
                 <div class="joker-showcase">
                     @foreach (var joker in allJokers)
                     {
@@ -83,8 +92,27 @@
 @code {
     private List<Joker> allJokers = new();
     
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        allJokers = JokerProcessor.GetAllJokers();
+        try
+        {
+            allJokers = JokerProcessor.GetAllJokers();
+            
+            // Set initial language based on browser/stored preference
+            var currentLanguage = await LocalizationService.GetCurrentLanguageAsync();
+            await LocalizationService.SetLanguageWithoutReloadAsync(currentLanguage);
+        }
+        catch (Exception ex)
+        {
+            // Fallback if localization fails
+            allJokers = JokerProcessor.GetAllJokers();
+            Console.WriteLine($"Localization error: {ex.Message}");
+        }
+    }
+    
+    private async Task OnLanguageChanged(string languageCode)
+    {
+        // Language change is handled by the LocalizationService
+        StateHasChanged();
     }
 }

@@ -1,0 +1,127 @@
+@using BalatroPoker.Services
+@using Microsoft.Extensions.Localization
+@inject LocalizationService LocalizationService
+@inject IStringLocalizer<LanguageSelector> Localizer
+@implements IDisposable
+
+<div class="language-selector">
+    <div class="dropdown">
+        <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" @onclick="ToggleDropdown" aria-expanded="@IsDropdownOpen">
+            @if (SupportedLanguages.ContainsKey(CurrentLanguage))
+            {
+                <span class="flag">@SupportedLanguages[CurrentLanguage].Flag</span>
+                <span class="ms-1">@SupportedLanguages[CurrentLanguage].Name</span>
+            }
+        </button>
+        <ul class="dropdown-menu @(IsDropdownOpen ? "show" : "")">
+            @foreach (var language in SupportedLanguages)
+            {
+                <li>
+                    <button class="dropdown-item @(language.Key == CurrentLanguage ? "active" : "")" 
+                            @onclick="() => ChangeLanguage(language.Key)">
+                        <span class="flag">@language.Value.Flag</span>
+                        <span class="ms-2">@language.Value.Name</span>
+                    </button>
+                </li>
+            }
+        </ul>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string? GameId { get; set; }
+    [Parameter] public EventCallback<string> OnLanguageChanged { get; set; }
+    
+    private string CurrentLanguage = "en";
+    private bool IsDropdownOpen = false;
+    private Dictionary<string, (string Name, string Flag)> SupportedLanguages = new()
+    {
+        { "en", ("English", "🇬🇧") },
+        { "de", ("Deutsch", "🇩🇪") },
+        { "fr", ("Français", "🇫🇷") },
+        { "it", ("Italiano", "🇮🇹") },
+        { "es", ("Español", "🇪🇸") }
+    };
+    
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            if (LocalizationService != null)
+            {
+                if (!string.IsNullOrEmpty(GameId))
+                {
+                    CurrentLanguage = await LocalizationService.GetGameLanguageAsync(GameId);
+                }
+                else
+                {
+                    CurrentLanguage = await LocalizationService.GetCurrentLanguageAsync();
+                }
+                
+                LocalizationService.LanguageChanged += OnLanguageChangedInternal;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"LanguageSelector initialization error: {ex.Message}");
+            CurrentLanguage = "en";
+        }
+    }
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            StateHasChanged();
+        }
+    }
+    
+    private void ToggleDropdown()
+    {
+        IsDropdownOpen = !IsDropdownOpen;
+    }
+    
+    private async Task ChangeLanguage(string languageCode)
+    {
+        CurrentLanguage = languageCode;
+        IsDropdownOpen = false; // Close dropdown after selection
+        
+        if (!string.IsNullOrEmpty(GameId))
+        {
+            await LocalizationService.SetGameLanguageAsync(GameId, languageCode);
+        }
+        
+        await LocalizationService.SetLanguageAsync(languageCode);
+        await OnLanguageChanged.InvokeAsync(languageCode);
+    }
+    
+    private void OnLanguageChangedInternal()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+    
+    public void Dispose()
+    {
+        LocalizationService.LanguageChanged -= OnLanguageChangedInternal;
+    }
+}
+
+<style>
+    .language-selector .flag {
+        font-size: 1.2em;
+    }
+    
+    .language-selector .dropdown-item {
+        display: flex;
+        align-items: center;
+    }
+    
+    .language-selector .dropdown-item:hover {
+        background-color: rgba(124, 58, 237, 0.1);
+    }
+    
+    .language-selector .dropdown-item.active {
+        background-color: rgba(124, 58, 237, 0.2);
+        color: #7c3aed;
+    }
+</style>

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  
+  <!-- Common UI Elements -->
+  <data name="AppTitle" xml:space="preserve">
+    <value>Balatro Planning Poker</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Benvenuto</value>
+  </data>
+  <data name="Players" xml:space="preserve">
+    <value>Giocatori</value>
+  </data>
+  <data name="AllowedValues" xml:space="preserve">
+    <value>Valori Consentiti</value>
+  </data>
+  <data name="Jokers" xml:space="preserve">
+    <value>Jolly</value>
+  </data>
+  <data name="AvailableJokers" xml:space="preserve">
+    <value>Jolly Disponibili</value>
+  </data>
+  <data name="RevealedJokers" xml:space="preserve">
+    <value>Jolly Rivelati!</value>
+  </data>
+
+  <!-- Game Actions -->
+  <data name="CreateGame" xml:space="preserve">
+    <value>Crea Partita</value>
+  </data>
+  <data name="JoinGame" xml:space="preserve">
+    <value>Unisciti alla Partita</value>
+  </data>
+  <data name="StartVoting" xml:space="preserve">
+    <value>Inizia Votazione</value>
+  </data>
+  <data name="RevealCards" xml:space="preserve">
+    <value>Rivela Carte &amp; Applica Jolly</value>
+  </data>
+  <data name="NewRound" xml:space="preserve">
+    <value>Nuovo Round</value>
+  </data>
+  <data name="ConfirmVote" xml:space="preserve">
+    <value>Conferma Voto</value>
+  </data>
+  <data name="VoteSubmitted" xml:space="preserve">
+    <value>Voto Inviato!</value>
+  </data>
+
+  <!-- Game Status -->
+  <data name="CurrentSum" xml:space="preserve">
+    <value>Somma Attuale</value>
+  </data>
+  <data name="YourVote" xml:space="preserve">
+    <value>Il tuo voto</value>
+  </data>
+  <data name="VotingProgress" xml:space="preserve">
+    <value>Progresso Votazione</value>
+  </data>
+  <data name="VotingResults" xml:space="preserve">
+    <value>Risultati Votazione</value>
+  </data>
+  <data name="VotingEnded" xml:space="preserve">
+    <value>Votazione Terminata!</value>
+  </data>
+  <data name="FinalValues" xml:space="preserve">
+    <value>Valori Finali</value>
+  </data>
+  <data name="TeamStatistics" xml:space="preserve">
+    <value>Statistiche del Team</value>
+  </data>
+  <data name="Average" xml:space="preserve">
+    <value>Media</value>
+  </data>
+  <data name="Minimum" xml:space="preserve">
+    <value>Min</value>
+  </data>
+  <data name="Maximum" xml:space="preserve">
+    <value>Max</value>
+  </data>
+
+  <!-- Forms -->
+  <data name="YourName" xml:space="preserve">
+    <value>Il tuo Nome</value>
+  </data>
+  <data name="JokerCount" xml:space="preserve">
+    <value>Numero di Jolly</value>
+  </data>
+  <data name="GameSettings" xml:space="preserve">
+    <value>Impostazioni di Gioco</value>
+  </data>
+
+  <!-- Messages -->
+  <data name="MustMatchAllowedValue" xml:space="preserve">
+    <value>Deve corrispondere a un valore consentito</value>
+  </data>
+  <data name="SelectCardsToReachValue" xml:space="preserve">
+    <value>Seleziona le carte da combinare per raggiungere un valore consentito</value>
+  </data>
+  <data name="JokersWillBeDrawn" xml:space="preserve">
+    <value>{0} jolly verranno pescati dopo la votazione</value>
+  </data>
+  <data name="PlayersVoted" xml:space="preserve">
+    <value>{0} di {1} hanno votato</value>
+  </data>
+
+  <!-- Roles -->
+  <data name="ProductOwner" xml:space="preserve">
+    <value>Product Owner</value>
+  </data>
+  <data name="Player" xml:space="preserve">
+    <value>Giocatore</value>
+  </data>
+  <data name="You" xml:space="preserve">
+    <value>Lei</value>
+  </data>
+
+  <!-- How It Works -->
+  <data name="HowItWorks" xml:space="preserve">
+    <value>Come Funziona</value>
+  </data>
+  <data name="SelectCards" xml:space="preserve">
+    <value>Seleziona Carte</value>
+  </data>
+  <data name="SelectCardsDesc" xml:space="preserve">
+    <value>Combina le carte da gioco (2,3,5,8,F,R,R,A) per raggiungere i valori Fibonacci consentiti</value>
+  </data>
+  <data name="RandomJokers" xml:space="preserve">
+    <value>Jolly Casuali</value>
+  </data>
+  <data name="RandomJokersDesc" xml:space="preserve">
+    <value>I jolly appaiono e trasformano i voti in modi inaspettati - proprio come in Balatro!</value>
+  </data>
+  <data name="FinalResults" xml:space="preserve">
+    <value>Risultati Finali</value>
+  </data>
+  <data name="FinalResultsDesc" xml:space="preserve">
+    <value>Visualizza i voti originali vs trasformati e le statistiche del team</value>
+  </data>
+
+  <!-- Descriptions -->
+  <data name="ProductOwnerDesc" xml:space="preserve">
+    <value>Crei e gestisca sessioni di planning poker con impostazioni personalizzabili e monitoraggio in tempo reale.</value>
+  </data>
+  <data name="PlayerDesc" xml:space="preserve">
+    <value>Si unisca a una sessione di planning poker con il suo codice giocatore unico e inizi a votare con le carte!</value>
+  </data>
+  <data name="GetPlayerUrl" xml:space="preserve">
+    <value>Ottenga l'URL del giocatore dal suo Product Owner</value>
+  </data>
+  <data name="AppDescription" xml:space="preserve">
+    <value>Planning poker con meccaniche di carte in stile Balatro e jolly che trasformano i suoi voti!</value>
+  </data>
+  <data name="JokersShowcaseDesc" xml:space="preserve">
+    <value>Ecco tutti i jolly che possono apparire nelle sue partite:</value>
+  </data>
+
+  <!-- Errors -->
+  <data name="GameNotFound" xml:space="preserve">
+    <value>Partita Non Trovata</value>
+  </data>
+  <data name="InvalidPlayerCode" xml:space="preserve">
+    <value>Codice giocatore non valido. Controlli il suo URL.</value>
+  </data>
+
+  <!-- Cards -->
+  <data name="YourHand" xml:space="preserve">
+    <value>La sua Mano</value>
+  </data>
+</root>
