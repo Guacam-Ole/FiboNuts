@@ -63,28 +63,43 @@ else
                 
                 @if (game.Phase == GamePhase.Voting)
                 {
+                    <!-- Jokers Section at Top -->
+                    @if (game.JokerCount > 0)
+                    {
+                        <div class="card mb-4">
+                            <div class="card-body text-center">
+                                <h5>🎭 Available Jokers</h5>
+                                <p class="text-muted">@game.JokerCount joker(s) will be drawn after voting</p>
+                                <div class="joker-placeholder">
+                                    @for (int i = 0; i < game.JokerCount; i++)
+                                    {
+                                        <div class="joker-slot">
+                                            <svg width="80" height="110" viewBox="0 0 80 110" xmlns="http://www.w3.org/2000/svg">
+                                                <rect x="2" y="2" width="76" height="106" rx="6" ry="6" 
+                                                      fill="rgba(124, 58, 237, 0.2)" 
+                                                      stroke="#7c3aed" 
+                                                      stroke-width="2" 
+                                                      stroke-dasharray="8,4" />
+                                                <text x="40" y="60" font-family="Arial, sans-serif" font-size="24" 
+                                                      fill="#7c3aed" text-anchor="middle">?</text>
+                                            </svg>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    
+                    <!-- Playing Cards Section -->
                     <div class="card">
                         <div class="card-body">
-                            <h5>Your Cards</h5>
+                            <h5>🎴 Your Hand</h5>
                             <p class="text-muted">Select cards to combine and reach an allowed value</p>
                             
-                            <div class="row mb-4">
+                            <div class="playing-cards-container">
                                 @foreach (var card in currentPlayer.Cards)
                                 {
-                                    <div class="col-3 mb-3">
-                                        <div class="card @(card.IsSelected ? "border-primary bg-light" : "border-secondary bg-light") card-selectable"
-                                             @onclick="@(() => ToggleCard(card))" 
-                                             style="cursor: pointer; min-height: 100px;">
-                                            <div class="card-body text-center p-2">
-                                                <div class="h4 mb-1 @(card.IsRed ? "text-danger" : "text-white")">
-                                                    @card.DisplayValue
-                                                </div>
-                                                <div class="h5 @(card.IsRed ? "text-danger" : "text-white")">
-                                                    @card.SuitSymbol
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <PlayingCard Card="card" OnClick="@(async (selectedCard) => ToggleCard(selectedCard))" />
                                 }
                             </div>
                             
@@ -126,6 +141,22 @@ else
                 }
                 else if (game.Phase == GamePhase.Revealed)
                 {
+                    <!-- Revealed Jokers at Top -->
+                    @if (game.ActiveJokers.Any())
+                    {
+                        <div class="card mb-4">
+                            <div class="card-body text-center">
+                                <h5>🎭 Jokers Revealed!</h5>
+                                <div class="revealed-jokers">
+                                    @foreach (var joker in game.ActiveJokers)
+                                    {
+                                        <JokerCard Joker="joker" />
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    
                     <div class="card">
                         <div class="card-body">
                             <h5>🎭 Voting Results</h5>
@@ -142,19 +173,6 @@ else
                                     </div>
                                 }
                             </div>
-                            
-                            @if (game.ActiveJokers.Any())
-                            {
-                                <div class="alert alert-info">
-                                    <h6>🃏 Jokers Applied:</h6>
-                                    @foreach (var joker in game.ActiveJokers)
-                                    {
-                                        <div class="mb-1">
-                                            <strong>@joker.Name:</strong> @joker.Description
-                                        </div>
-                                    }
-                                </div>
-                            }
                             
                             <div class="alert alert-primary">
                                 <h6><strong>Final Values:</strong></h6>
