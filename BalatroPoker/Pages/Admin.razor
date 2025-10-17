@@ -1,0 +1,361 @@
+@page "/admin"
+@using BalatroPoker.Models
+@using BalatroPoker.Services
+@inject GameService GameService
+@inject NavigationManager Navigation
+@implements IDisposable
+
+<PageTitle>Admin - Balatro Planning Poker</PageTitle>
+
+@if (game == null)
+{
+    <div class="container mt-4">
+        <div class="alert alert-danger">
+            <h4>Game Not Found</h4>
+            <p>Invalid admin code. Please check your URL.</p>
+            <a href="/create" class="btn btn-primary">Create New Game</a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-md-8">
+                <h1>🃏 Balatro Planning Poker - Admin View</h1>
+                <div class="alert alert-secondary">
+                    <strong>Game Phase:</strong> @game.Phase 
+                    @if (game.ActiveJokers.Any())
+                    {
+                        <span class="ms-3"><strong>Active Jokers:</strong> @game.ActiveJokers.Count</span>
+                    }
+                </div>
+                
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5>Game Settings</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="form-label">Allowed Values</label>
+                                <div class="row">
+                                    @foreach (var value in GameState.FibonacciValues)
+                                    {
+                                        <div class="col-3 mb-2">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" 
+                                                       checked="@game.AllowedValues.Contains(value)"
+                                                       @onchange="@(e => ToggleAllowedValue(value, (bool)e.Value!))" />
+                                                <label class="form-check-label">@value</label>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Jokers per Round: @game.JokerCount</label>
+                                <input type="range" class="form-range" min="0" max="5" 
+                                       @bind="game.JokerCount" @bind:event="oninput" 
+                                       @onchange="UpdateSettings" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5>Players (@game.Players.Count)</h5>
+                            <div>
+                                @if (game.Phase == GamePhase.Voting)
+                                {
+                                    <button class="btn btn-success me-2" @onclick="RevealCards" 
+                                            disabled="@(!game.Players.Any(p => p.HasVoted))">
+                                        Reveal Cards & Apply Jokers 🎭
+                                    </button>
+                                }
+                                else if (game.Phase == GamePhase.Revealed)
+                                {
+                                    <button class="btn btn-primary me-2" @onclick="StartNewRound">
+                                        Start New Round 🔄
+                                    </button>
+                                }
+                            </div>
+                        </div>
+                        
+                        @if (!game.Players.Any())
+                        {
+                            <div class="alert alert-info">
+                                <strong>Share this URL with players:</strong>
+                                <div class="input-group mt-2">
+                                    <input type="text" class="form-control" readonly 
+                                           value="@($"{Navigation.BaseUri}play?code={game.PlayerCode}")" />
+                                    <button class="btn btn-outline-light" type="button" 
+                                            @onclick="@(() => CopyToClipboard($"{Navigation.BaseUri}play?code={game.PlayerCode}"))">
+                                        Copy
+                                    </button>
+                                </div>
+                            </div>
+                        }
+                        
+                        <div class="row">
+                            @foreach (var player in game.Players)
+                            {
+                                <div class="col-md-6 mb-3">
+                                    <div class="card @(player.HasVoted ? "border-success" : "border-warning")">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <h6 class="card-title mb-1">@player.Name</h6>
+                                                <span class="badge @(player.HasVoted ? "bg-success" : "bg-warning")">
+                                                    @(player.HasVoted ? "Voted" : "Voting...")
+                                                </span>
+                                            </div>
+                                            
+                                            @if (player.HasVoted)
+                                            {
+                                                <div class="mt-2">
+                                                    <small class="text-muted">Selected Cards:</small>
+                                                    <div class="d-flex gap-1 mb-2">
+                                                        @foreach (var card in player.SelectedCards)
+                                                        {
+                                                            <span class="badge @(card.IsRed ? "text-danger" : "text-dark") bg-light border">
+                                                                @card.DisplayValue@card.SuitSymbol
+                                                            </span>
+                                                        }
+                                                    </div>
+                                                    
+                                                    @if (game.Phase == GamePhase.Revealed)
+                                                    {
+                                                        <div class="vote-display">
+                                                            @if (player.OriginalVote != player.FinalVote)
+                                                            {
+                                                                <span class="text-decoration-line-through text-muted">@player.OriginalVote</span>
+                                                                <span class="mx-2">→</span>
+                                                                <strong class="text-primary">@player.FinalVote</strong>
+                                                            }
+                                                            else
+                                                            {
+                                                                <strong>@player.FinalVote</strong>
+                                                            }
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="vote-display">
+                                                            <strong>@player.OriginalVote</strong>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                
+                @if (game.Phase == GamePhase.Revealed)
+                {
+                    <div class="card mt-4">
+                        <div class="card-body">
+                            <h5>🎭 Voting Results</h5>
+                            
+                            <div class="alert alert-success">
+                                <h6 class="mb-3"><strong>Voting Ended!</strong></h6>
+                                
+                                @foreach (var player in game.Players.Where(p => p.HasVoted))
+                                {
+                                    <div class="mb-2">
+                                        <strong>@player.Name</strong> selected 
+                                        <span class="badge bg-secondary">@player.OriginalVote</span>
+                                    </div>
+                                }
+                            </div>
+                            
+                            @if (game.ActiveJokers.Any())
+                            {
+                                <div class="alert alert-info">
+                                    <h6>🃏 Active Jokers:</h6>
+                                    @foreach (var joker in game.ActiveJokers)
+                                    {
+                                        <div class="mb-1">
+                                            <strong>@joker.Name:</strong> @joker.Description
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            
+                            <div class="alert alert-primary">
+                                <h6><strong>Final Values:</strong></h6>
+                                @foreach (var player in game.Players.Where(p => p.HasVoted))
+                                {
+                                    <div class="mb-2 d-flex justify-content-between align-items-center">
+                                        <span><strong>@player.Name:</strong></span>
+                                        <span class="h5 mb-0">
+                                            @if (player.OriginalVote != player.FinalVote)
+                                            {
+                                                <span class="text-decoration-line-through text-muted me-2">@player.OriginalVote</span>
+                                                <span class="text-primary">→ @player.FinalVote</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-success">@player.FinalVote</span>
+                                            }
+                                        </span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            
+            <div class="col-md-4">
+                @if (game.Phase == GamePhase.Revealed)
+                {
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5>Statistics</h5>
+                            <div class="row text-center">
+                                <div class="col-4">
+                                    <div class="border rounded p-2">
+                                        <small class="text-muted">Average</small>
+                                        <div class="h4">@game.AverageVote.ToString("F1")</div>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="border rounded p-2">
+                                        <small class="text-muted">Min</small>
+                                        <div class="h4">@game.MinVote</div>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="border rounded p-2">
+                                        <small class="text-muted">Max</small>
+                                        <div class="h4">@game.MaxVote</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    @if (game.ActiveJokers.Any())
+                    {
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>Active Jokers 🎭</h5>
+                                @foreach (var joker in game.ActiveJokers)
+                                {
+                                    <div class="border rounded p-2 mb-2">
+                                        <strong>@joker.Name</strong>
+                                        <div class="small text-muted">@joker.Description</div>
+                                        <span class="badge bg-secondary">@joker.Position</span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="card">
+                        <div class="card-body">
+                            <h5>Voting Progress</h5>
+                            <div class="progress mb-2">
+                                <div class="progress-bar" style="width: @((game.Players.Count > 0 ? (double)game.Players.Count(p => p.HasVoted) / game.Players.Count * 100 : 0).ToString("F0"))%"></div>
+                            </div>
+                            <small class="text-muted">
+                                @game.Players.Count(p => p.HasVoted) of @game.Players.Count players voted
+                            </small>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [SupplyParameterFromQuery] public string? Code { get; set; }
+    
+    private GameState? game;
+    private Timer? refreshTimer;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrEmpty(Code))
+        {
+            game = await GameService.GetGameByAdminCodeAsync(Code);
+        }
+        
+        refreshTimer = new Timer(async _ => {
+            if (!string.IsNullOrEmpty(Code))
+            {
+                game = await GameService.GetGameByAdminCodeAsync(Code);
+                await InvokeAsync(StateHasChanged);
+            }
+        }, null, TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(2));
+    }
+    
+    private async Task ToggleAllowedValue(int value, bool isChecked)
+    {
+        if (game == null) return;
+        
+        if (isChecked)
+        {
+            if (!game.AllowedValues.Contains(value))
+                game.AllowedValues.Add(value);
+        }
+        else
+        {
+            game.AllowedValues.Remove(value);
+        }
+        
+        await UpdateSettings();
+    }
+    
+    private async Task UpdateSettings()
+    {
+        if (game == null) return;
+        await GameService.UpdateGameSettingsAsync(game.AdminCode, game.AllowedValues, game.JokerCount);
+    }
+    
+    private async Task RevealCards()
+    {
+        if (game == null) return;
+        
+        try
+        {
+            Console.WriteLine($"[DEBUG] RevealCards called - Game Phase: {game.Phase}, Players: {game.Players.Count}");
+            Console.WriteLine($"[DEBUG] Players voted: {string.Join(", ", game.Players.Select(p => $"{p.Name}={p.HasVoted}"))}");
+            
+            await GameService.RevealCardsAsync(game.AdminCode);
+            
+            // Refresh the game state immediately after reveal
+            game = await GameService.GetGameByAdminCodeAsync(game.AdminCode);
+            StateHasChanged();
+            
+            Console.WriteLine($"[DEBUG] RevealCards completed - New Phase: {game?.Phase}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[ERROR] RevealCards failed: {ex.Message}");
+        }
+    }
+    
+    private async Task StartNewRound()
+    {
+        if (game == null) return;
+        await GameService.StartNewRoundAsync(game.AdminCode);
+    }
+    
+    private async Task CopyToClipboard(string text)
+    {
+        await Task.Run(() => {});
+    }
+    
+    public void Dispose()
+    {
+        refreshTimer?.Dispose();
+    }
+}

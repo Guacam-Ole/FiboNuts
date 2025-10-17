@@ -1,0 +1,357 @@
+@page "/play"
+@using BalatroPoker.Models
+@using BalatroPoker.Services
+@inject GameService GameService
+@inject NavigationManager Navigation
+@implements IDisposable
+
+<PageTitle>Play - Balatro Planning Poker</PageTitle>
+
+@if (game == null)
+{
+    <div class="container mt-4">
+        <div class="alert alert-danger">
+            <h4>Game Not Found</h4>
+            <p>Invalid player code. Please check your URL.</p>
+        </div>
+    </div>
+}
+else if (currentPlayer == null)
+{
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="text-center mb-4">🃏 Join Balatro Planning Poker</h3>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Your Name</label>
+                            <input type="text" class="form-control" @bind="playerName" 
+                                   @onkeypress="@(async (e) => { if (e.Key == "Enter") await JoinGame(); })" />
+                        </div>
+                        
+                        <button class="btn btn-primary w-100" @onclick="JoinGame" 
+                                disabled="@string.IsNullOrWhiteSpace(playerName)">
+                            Join Game 🎮
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-8">
+                <h1>🃏 Balatro Planning Poker</h1>
+                <h4 class="text-muted mb-4">Welcome, @currentPlayer.Name!</h4>
+                
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5>Allowed Values</h5>
+                        <div class="d-flex gap-2 flex-wrap">
+                            @foreach (var value in game.AllowedValues)
+                            {
+                                <span class="badge bg-primary fs-6">@value</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+                
+                @if (game.Phase == GamePhase.Voting)
+                {
+                    <div class="card">
+                        <div class="card-body">
+                            <h5>Your Cards</h5>
+                            <p class="text-muted">Select cards to combine and reach an allowed value</p>
+                            
+                            <div class="row mb-4">
+                                @foreach (var card in currentPlayer.Cards)
+                                {
+                                    <div class="col-3 mb-3">
+                                        <div class="card @(card.IsSelected ? "border-primary bg-light" : "border-secondary bg-light") card-selectable"
+                                             @onclick="@(() => ToggleCard(card))" 
+                                             style="cursor: pointer; min-height: 100px;">
+                                            <div class="card-body text-center p-2">
+                                                <div class="h4 mb-1 @(card.IsRed ? "text-danger" : "text-white")">
+                                                    @card.DisplayValue
+                                                </div>
+                                                <div class="h5 @(card.IsRed ? "text-danger" : "text-white")">
+                                                    @card.SuitSymbol
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="card bg-light">
+                                        <div class="card-body text-center">
+                                            <h6>Current Sum</h6>
+                                            <div class="h3 @(IsValidSum() ? "text-success" : "text-danger")">
+                                                @currentPlayer.CurrentSum
+                                            </div>
+                                            @if (!IsValidSum() && currentPlayer.CurrentSum > 0)
+                                            {
+                                                <small class="text-danger">Must match an allowed value</small>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 d-flex align-items-center">
+                                    @if (!currentPlayer.HasVoted)
+                                    {
+                                        <button class="btn btn-success btn-lg w-100" 
+                                                @onclick="SubmitVote" 
+                                                disabled="@(!IsValidSum())">
+                                            Confirm Vote ✓
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <div class="alert alert-success w-100 mb-0">
+                                            <strong>Vote Submitted! ✓</strong>
+                                            <div>Your vote: @currentPlayer.OriginalVote</div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else if (game.Phase == GamePhase.Revealed)
+                {
+                    <div class="card">
+                        <div class="card-body">
+                            <h5>🎭 Voting Results</h5>
+                            
+                            <div class="alert alert-success">
+                                <h6 class="mb-3"><strong>Voting Ended!</strong></h6>
+                                
+                                @foreach (var player in game.Players.Where(p => p.HasVoted))
+                                {
+                                    <div class="mb-2">
+                                        <strong>@player.Name</strong> selected 
+                                        <span class="badge @(player.Id == currentPlayer.Id ? "bg-primary" : "bg-secondary")">@player.OriginalVote</span>
+                                        @if (player.Id == currentPlayer.Id) { <small class="text-muted">(You)</small> }
+                                    </div>
+                                }
+                            </div>
+                            
+                            @if (game.ActiveJokers.Any())
+                            {
+                                <div class="alert alert-info">
+                                    <h6>🃏 Jokers Applied:</h6>
+                                    @foreach (var joker in game.ActiveJokers)
+                                    {
+                                        <div class="mb-1">
+                                            <strong>@joker.Name:</strong> @joker.Description
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            
+                            <div class="alert alert-primary">
+                                <h6><strong>Final Values:</strong></h6>
+                                @foreach (var player in game.Players.Where(p => p.HasVoted))
+                                {
+                                    <div class="mb-2 d-flex justify-content-between align-items-center @(player.Id == currentPlayer.Id ? "bg-light rounded p-2" : "")">
+                                        <span><strong>@player.Name:</strong> @if (player.Id == currentPlayer.Id) { <small>(You)</small> }</span>
+                                        <span class="h5 mb-0">
+                                            @if (player.OriginalVote != player.FinalVote)
+                                            {
+                                                <span class="text-decoration-line-through text-muted me-2">@player.OriginalVote</span>
+                                                <span class="text-primary">→ @player.FinalVote</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-success">@player.FinalVote</span>
+                                            }
+                                        </span>
+                                    </div>
+                                }
+                            </div>
+                            
+                            <div class="mt-4">
+                                <h6>Team Statistics:</h6>
+                                <div class="row text-center">
+                                    <div class="col-4">
+                                        <div class="border rounded p-2">
+                                            <small class="text-muted">Average</small>
+                                            <div class="h5">@game.AverageVote.ToString("F1")</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="border rounded p-2">
+                                            <small class="text-muted">Min</small>
+                                            <div class="h5">@game.MinVote</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="border rounded p-2">
+                                            <small class="text-muted">Max</small>
+                                            <div class="h5">@game.MaxVote</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Players (@game.Players.Count)</h5>
+                        @foreach (var player in game.Players)
+                        {
+                            <div class="d-flex justify-content-between align-items-center mb-2 p-2 border rounded">
+                                <span class="@(player.Id == currentPlayer.Id ? "fw-bold" : "")">
+                                    @player.Name
+                                    @if (player.Id == currentPlayer.Id) { <small>(You)</small> }
+                                </span>
+                                <span class="badge @(player.HasVoted ? "bg-success" : "bg-warning")">
+                                    @(player.HasVoted ? "✓" : "...")
+                                </span>
+                            </div>
+                        }
+                    </div>
+                </div>
+                
+                @if (game.Phase == GamePhase.Voting)
+                {
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <h6>Voting Progress</h6>
+                            <div class="progress">
+                                <div class="progress-bar" style="width: @((game.Players.Count > 0 ? (double)game.Players.Count(p => p.HasVoted) / game.Players.Count * 100 : 0).ToString("F0"))%"></div>
+                            </div>
+                            <small class="text-muted">
+                                @game.Players.Count(p => p.HasVoted) of @game.Players.Count voted
+                            </small>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [SupplyParameterFromQuery] public string? Code { get; set; }
+    
+    private GameState? game;
+    private Player? currentPlayer;
+    private string playerName = "";
+    private Timer? refreshTimer;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrEmpty(Code))
+        {
+            game = await GameService.GetGameByPlayerCodeAsync(Code);
+        }
+        
+        refreshTimer = new Timer(async _ => {
+            if (game != null && !string.IsNullOrEmpty(Code))
+            {
+                var updatedGame = await GameService.GetGameByPlayerCodeAsync(Code);
+                if (updatedGame != null)
+                {
+                    game = updatedGame;
+                    if (currentPlayer != null)
+                    {
+                        var updatedPlayer = game.Players.FirstOrDefault(p => p.Id == currentPlayer.Id);
+                        if (updatedPlayer != null)
+                        {
+                            // Preserve current selection state if player hasn't voted yet
+                            if (!currentPlayer.HasVoted)
+                            {
+                                updatedPlayer.SelectedCards = currentPlayer.SelectedCards;
+                                // Update IsSelected property on cards
+                                foreach (var card in updatedPlayer.Cards)
+                                {
+                                    card.IsSelected = currentPlayer.SelectedCards.Any(sc => 
+                                        sc.Value == card.Value && sc.Suit == card.Suit);
+                                }
+                            }
+                            currentPlayer = updatedPlayer;
+                        }
+                    }
+                    await InvokeAsync(StateHasChanged);
+                }
+            }
+        }, null, TimeSpan.FromSeconds(2), TimeSpan.FromSeconds(2));
+    }
+    
+    private async Task JoinGame()
+    {
+        if (game == null || string.IsNullOrWhiteSpace(playerName)) return;
+        
+        try
+        {
+            currentPlayer = await GameService.AddPlayerAsync(Code!, playerName.Trim());
+            await InvokeAsync(StateHasChanged);
+        }
+        catch (Exception ex)
+        {
+        }
+    }
+    
+    private void ToggleCard(Card card)
+    {
+        if (currentPlayer?.HasVoted == true || currentPlayer?.SelectedCards == null) return;
+        
+        card.IsSelected = !card.IsSelected;
+        
+        if (card.IsSelected)
+        {
+            // Only add if not already present (prevent duplicates)
+            if (!currentPlayer.SelectedCards.Any(c => c.Value == card.Value && c.Suit == card.Suit))
+            {
+                currentPlayer.SelectedCards.Add(card);
+            }
+        }
+        else
+        {
+            // Remove by value/suit match instead of object reference
+            currentPlayer.SelectedCards.RemoveAll(c => c.Value == card.Value && c.Suit == card.Suit);
+        }
+        
+        // Force UI update
+        StateHasChanged();
+    }
+    
+    private bool IsValidSum()
+    {
+        return currentPlayer != null && 
+               game != null && 
+               currentPlayer.CurrentSum > 0 && 
+               game.AllowedValues.Contains(currentPlayer.CurrentSum);
+    }
+    
+    private async Task SubmitVote()
+    {
+        if (currentPlayer == null || game == null || !IsValidSum()) return;
+        
+        try
+        {
+            await GameService.SubmitVoteAsync(Code!, currentPlayer.Id, currentPlayer.SelectedCards.ToList());
+            await InvokeAsync(StateHasChanged);
+        }
+        catch (Exception ex)
+        {
+        }
+    }
+    
+    public void Dispose()
+    {
+        refreshTimer?.Dispose();
+    }
+}

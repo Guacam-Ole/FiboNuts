@@ -1,0 +1,124 @@
+@page "/create"
+@using BalatroPoker.Models
+@using BalatroPoker.Services
+@inject GameService GameService
+@inject NavigationManager Navigation
+
+<PageTitle>Create Game - Balatro Planning Poker</PageTitle>
+
+<div class="container mt-4">
+    <h1 class="text-center mb-4">🃏 Create Balatro Planning Poker Game</h1>
+    
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Game Settings</h5>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Allowed Fibonacci Values</label>
+                        <div class="row">
+                            @foreach (var value in GameState.FibonacciValues)
+                            {
+                                <div class="col-3 mb-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" 
+                                               checked="@allowedValues.Contains(value)"
+                                               @onchange="@(e => ToggleValue(value, (bool)e.Value!))" />
+                                        <label class="form-check-label">@value</label>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Number of Jokers per Round (0-5)</label>
+                        <input type="range" class="form-range" min="0" max="5" 
+                               @bind="jokerCount" @bind:event="oninput" />
+                        <div class="text-center"><strong>@jokerCount</strong></div>
+                    </div>
+                    
+                    <button class="btn btn-primary btn-lg w-100" @onclick="CreateGame">
+                        Create Game 🎮
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    @if (createdGame != null)
+    {
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-8">
+                <div class="alert alert-success">
+                    <h5>🎉 Game Created Successfully!</h5>
+                    
+                    <div class="mb-3">
+                        <strong>Admin URL (for you):</strong>
+                        <div class="input-group">
+                            <input type="text" class="form-control" readonly 
+                                   value="@($"{Navigation.BaseUri}admin?code={createdGame.AdminCode}")" />
+                            <button class="btn btn-outline-secondary" type="button" 
+                                    @onclick="@(() => CopyToClipboard($"{Navigation.BaseUri}admin?code={createdGame.AdminCode}"))">
+                                Copy
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <strong>Player URL (share with team):</strong>
+                        <div class="input-group">
+                            <input type="text" class="form-control" readonly 
+                                   value="@($"{Navigation.BaseUri}play?code={createdGame.PlayerCode}")" />
+                            <button class="btn btn-outline-secondary" type="button" 
+                                    @onclick="@(() => CopyToClipboard($"{Navigation.BaseUri}play?code={createdGame.PlayerCode}"))">
+                                Copy
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-success" @onclick="@(() => Navigation.NavigateTo($"/admin?code={createdGame.AdminCode}"))">
+                        Go to Admin View 🎯
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private List<int> allowedValues = new() { 1, 2, 3, 5, 8, 13, 21 };
+    private int jokerCount = 1;
+    private GameState? createdGame;
+    
+    private void ToggleValue(int value, bool isChecked)
+    {
+        if (isChecked)
+        {
+            if (!allowedValues.Contains(value))
+                allowedValues.Add(value);
+        }
+        else
+        {
+            allowedValues.Remove(value);
+        }
+    }
+    
+    private async Task CreateGame()
+    {
+        if (!allowedValues.Any())
+        {
+            return;
+        }
+        
+        createdGame = await GameService.CreateGameAsync();
+        await GameService.UpdateGameSettingsAsync(createdGame.AdminCode, allowedValues, jokerCount);
+        await GameService.StartGameAsync(createdGame.AdminCode);
+    }
+    
+    private async Task CopyToClipboard(string text)
+    {
+        await Task.Run(() => {});
+    }
+}

@@ -1,0 +1,67 @@
+﻿@page "/"
+
+<PageTitle>Balatro Planning Poker</PageTitle>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h1 class="display-4 mb-4">🃏 Balatro Planning Poker</h1>
+            <p class="lead mb-5">Planning poker with Balatro-style card mechanics and jokers that transform your votes!</p>
+            
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 border-primary">
+                        <div class="card-body">
+                            <h5 class="card-title">🎯 Product Owner</h5>
+                            <p class="card-text">Create and manage planning poker sessions with customizable settings and real-time monitoring.</p>
+                            <a href="/create" class="btn btn-primary btn-lg">Create Game</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 border-success">
+                        <div class="card-body">
+                            <h5 class="card-title">👥 Player</h5>
+                            <p class="card-text">Join a planning poker session with your unique player code and start voting with cards!</p>
+                            <p class="text-muted">Get the player URL from your Product Owner</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-5">
+                <h3>How It Works</h3>
+                <div class="row mt-4">
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                <span class="h4 mb-0">🎴</span>
+                            </div>
+                            <h6 class="mt-3">Select Cards</h6>
+                            <p class="small text-muted">Combine playing cards (2,3,5,8,J,Q,K,A) to reach allowed Fibonacci values</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                <span class="h4 mb-0">🎭</span>
+                            </div>
+                            <h6 class="mt-3">Random Jokers</h6>
+                            <p class="small text-muted">Jokers appear and transform votes in unexpected ways - just like Balatro!</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center">
+                            <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                <span class="h4 mb-0">📊</span>
+                            </div>
+                            <h6 class="mt-3">Final Results</h6>
+                            <p class="small text-muted">See original vs transformed votes and team statistics</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
