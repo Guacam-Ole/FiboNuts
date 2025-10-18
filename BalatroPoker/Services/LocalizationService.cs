@@ -7,7 +7,6 @@ namespace BalatroPoker.Services;
 public class LocalizationService
 {
     private readonly IJSRuntime _jsRuntime;
-    private readonly MetricsService _metricsService;
     
     public event Action? LanguageChanged;
     
@@ -20,10 +19,9 @@ public class LocalizationService
         { "es", ("Español", "🇪🇸") }
     };
     
-    public LocalizationService(IJSRuntime jsRuntime, MetricsService metricsService)
+    public LocalizationService(IJSRuntime jsRuntime)
     {
         _jsRuntime = jsRuntime;
-        _metricsService = metricsService;
     }
     
     public Dictionary<string, (string Name, string Flag)> SupportedLanguages => _supportedLanguages;
@@ -102,9 +100,6 @@ public class LocalizationService
                 
                 // Update URL with language parameter
                 await UpdateUrlWithLanguageAsync(languageCode);
-                
-                // Record language usage metrics
-                _metricsService.RecordLanguageUsage(languageCode);
                 
                 // Notify components that language changed
                 LanguageChanged?.Invoke();

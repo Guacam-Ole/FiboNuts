@@ -16,7 +16,6 @@ builder.Services.AddSingleton<LocalizationService>();
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddSingleton<GameService>();
-builder.Services.AddSingleton<MetricsService>();
 
 var app = builder.Build();
 
