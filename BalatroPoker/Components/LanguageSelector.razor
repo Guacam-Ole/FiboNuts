@@ -2,6 +2,7 @@
 @using Microsoft.Extensions.Localization
 @inject LocalizationService LocalizationService
 @inject IStringLocalizer<LanguageSelector> Localizer
+@inject ILogger<LanguageSelector> Logger
 @implements IDisposable
 
 <div class="language-selector">
@@ -63,7 +64,7 @@
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"LanguageSelector initialization error: {ex.Message}");
+            Logger.LogError(ex, "LanguageSelector initialization error");
             CurrentLanguage = "en";
         }
     }

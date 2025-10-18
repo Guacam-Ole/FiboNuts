@@ -5,6 +5,7 @@
 @using Microsoft.Extensions.Localization
 @inject IStringLocalizer<SharedResources> Localizer
 @inject LocalizationService LocalizationService
+@inject ILogger<Home> Logger
 
 <PageTitle>@Localizer["AppTitle"]</PageTitle>
 
@@ -106,7 +107,7 @@
         {
             // Fallback if localization fails
             allJokers = JokerProcessor.GetAllJokers();
-            Console.WriteLine($"Localization error: {ex.Message}");
+            Logger.LogError(ex, "Localization error");
         }
     }
     

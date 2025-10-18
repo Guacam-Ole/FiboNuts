@@ -1,12 +1,14 @@
 using Microsoft.JSInterop;
 using System.Globalization;
 using System.Reflection;
+using Microsoft.Extensions.Logging;
 
 namespace BalatroPoker.Services;
 
 public class LocalizationService
 {
     private readonly IJSRuntime _jsRuntime;
+    private readonly ILogger<LocalizationService> _logger;
     
     public event Action? LanguageChanged;
     
@@ -19,9 +21,10 @@ public class LocalizationService
         { "es", ("Español", "🇪🇸") }
     };
     
-    public LocalizationService(IJSRuntime jsRuntime)
+    public LocalizationService(IJSRuntime jsRuntime, ILogger<LocalizationService> logger)
     {
         _jsRuntime = jsRuntime;
+        _logger = logger;
     }
     
     public Dictionary<string, (string Name, string Flag)> SupportedLanguages => _supportedLanguages;
@@ -56,7 +59,7 @@ public class LocalizationService
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"GetCurrentLanguageAsync error: {ex.Message}");
+            _logger.LogError(ex, "GetCurrentLanguageAsync error");
             return "en"; // Default fallback
         }
     }
@@ -106,7 +109,7 @@ public class LocalizationService
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error setting language: {ex.Message}");
+                _logger.LogError(ex, "Error setting language");
             }
         }
     }
@@ -146,7 +149,7 @@ public class LocalizationService
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"UpdateUrlWithLanguageAsync error: {ex.Message}");
+            _logger.LogError(ex, "UpdateUrlWithLanguageAsync error");
         }
     }
     
@@ -173,11 +176,11 @@ public class LocalizationService
             var mainAssembly = Assembly.GetExecutingAssembly();
             var satelliteAssembly = mainAssembly.GetSatelliteAssembly(culture);
             
-            Console.WriteLine($"Loaded satellite assembly for {languageCode}: {satelliteAssembly?.FullName}");
+            _logger.LogDebug("Loaded satellite assembly for {LanguageCode}: {AssemblyName}", languageCode, satelliteAssembly?.FullName);
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Failed to load satellite assembly for {languageCode}: {ex.Message}");
+            _logger.LogWarning(ex, "Failed to load satellite assembly for {LanguageCode}", languageCode);
             
             // Fallback: Try to use reflection to find and load the assembly
             try
@@ -189,16 +192,16 @@ public class LocalizationService
                     
                 if (satelliteAssembly != null)
                 {
-                    Console.WriteLine($"Found existing satellite assembly: {satelliteAssembly.FullName}");
+                    _logger.LogDebug("Found existing satellite assembly: {AssemblyName}", satelliteAssembly.FullName);
                 }
                 else
                 {
-                    Console.WriteLine($"No satellite assembly found for {languageCode}");
+                    _logger.LogDebug("No satellite assembly found for {LanguageCode}", languageCode);
                 }
             }
             catch (Exception ex2)
             {
-                Console.WriteLine($"Reflection fallback failed: {ex2.Message}");
+                _logger.LogWarning(ex2, "Reflection fallback failed");
             }
         }
     }

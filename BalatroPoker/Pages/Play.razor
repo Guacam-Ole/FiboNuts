@@ -7,6 +7,7 @@
 @inject NavigationManager Navigation
 @inject LocalizationService LocalizationService
 @inject IStringLocalizer<SharedResources> Localizer
+@inject ILogger<Play> Logger
 @implements IDisposable
 
 <PageTitle>Play - Balatro Planning Poker</PageTitle>
@@ -285,7 +286,7 @@ else
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Localization error: {ex.Message}");
+            Logger.LogError(ex, "Localization error");
         }
         
         if (!string.IsNullOrEmpty(Code))

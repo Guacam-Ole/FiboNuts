@@ -1,18 +1,21 @@
 using BalatroPoker.Models;
 using Microsoft.JSInterop;
 using System.Text.Json;
+using Microsoft.Extensions.Logging;
 
 namespace BalatroPoker.Services;
 
 public class GameService
 {
     private readonly IJSRuntime _jsRuntime;
+    private readonly ILogger<GameService> _logger;
     private static readonly Random _random = new();
     private readonly JokerProcessor _jokerProcessor = new();
     
-    public GameService(IJSRuntime jsRuntime)
+    public GameService(IJSRuntime jsRuntime, ILogger<GameService> logger)
     {
         _jsRuntime = jsRuntime;
+        _logger = logger;
     }
     
     private async Task<Dictionary<string, GameState>> GetAllGamesAsync()
@@ -72,6 +75,10 @@ public class GameService
         games[game.GameId] = game;
         await SaveAllGamesAsync(games);
         
+        _logger.LogInformation("Game created with ID {GameId}", game.GameId);
+        _logger.LogInformation("METRIC: game_created, game_id={GameId}, allowed_values={AllowedValues}, joker_count={JokerCount}", 
+            game.GameId, string.Join(",", game.AllowedValues), game.JokerCount);
+        
         return game;
     }
     
@@ -107,6 +114,10 @@ public class GameService
         games[game.GameId] = game;
         await SaveAllGamesAsync(games);
         
+        _logger.LogInformation("Player {PlayerName} joined game {GameId}", name, game.GameId);
+        _logger.LogInformation("METRIC: player_joined, game_id={GameId}, player_name={PlayerName}, player_count={PlayerCount}", 
+            game.GameId, name, game.Players.Count);
+        
         return player;
     }
     
@@ -130,6 +141,11 @@ public class GameService
         game.LastUpdate = DateTime.UtcNow;
         games[game.GameId] = game;
         await SaveAllGamesAsync(games);
+        
+        var cardsList = string.Join(",", selectedCards.Select(c => $"{c.Suit}_{c.Value}"));
+        _logger.LogInformation("Vote submitted by {PlayerName} in game {GameId}: {VoteValue}", player.Name, game.GameId, sum);
+        _logger.LogInformation("METRIC: vote_submitted, game_id={GameId}, player_name={PlayerName}, vote_value={VoteValue}, cards={Cards}", 
+            game.GameId, player.Name, sum, cardsList);
     }
     
     public async Task UpdateGameSettingsAsync(string adminCode, List<int> allowedValues, int jokerCount)
@@ -159,32 +175,39 @@ public class GameService
     
     public async Task RevealCardsAsync(string adminCode)
     {
-        Console.WriteLine($"[DEBUG] RevealCardsAsync called with adminCode: {adminCode}");
+        _logger.LogDebug("RevealCardsAsync called with adminCode: {AdminCode}", adminCode);
         
         var games = await GetAllGamesAsync();
-        Console.WriteLine($"[DEBUG] Found {games.Count} games in storage");
+        _logger.LogDebug("Found {GameCount} games in storage", games.Count);
         
         var game = games.Values.FirstOrDefault(g => g.AdminCode == adminCode);
         if (game == null) 
         {
-            Console.WriteLine($"[ERROR] Game not found for adminCode: {adminCode}");
+            _logger.LogError("Game not found for adminCode: {AdminCode}", adminCode);
             throw new ArgumentException("Invalid admin code");
         }
         
-        Console.WriteLine($"[DEBUG] Game found - Phase: {game.Phase}, Players: {game.Players.Count}");
+        _logger.LogDebug("Game found - Phase: {Phase}, Players: {PlayerCount}", game.Phase, game.Players.Count);
         
         if (game.Phase != GamePhase.Voting) 
         {
-            Console.WriteLine($"[WARNING] Game phase is {game.Phase}, not Voting. Returning.");
+            _logger.LogWarning("Game phase is {Phase}, not Voting. Returning", game.Phase);
             return;
         }
         
         game.ActiveJokers = _jokerProcessor.SelectRandomJokers(game.JokerCount, game.JokerCount);
-        Console.WriteLine($"[DEBUG] Selected {game.ActiveJokers.Count} jokers: {string.Join(", ", game.ActiveJokers.Select(j => j.Name))}");
+        _logger.LogDebug("Selected {JokerCount} jokers: {JokerNames}", game.ActiveJokers.Count, string.Join(", ", game.ActiveJokers.Select(j => j.Name)));
+        
+        // Log joker usage metrics
+        foreach (var joker in game.ActiveJokers)
+        {
+            _logger.LogInformation("METRIC: joker_used, game_id={GameId}, joker_name={JokerName}, joker_description={JokerDescription}", 
+                game.GameId, joker.Name, joker.Description);
+        }
         
         // Apply jokers even if some players haven't voted (use 0 for unvoted players)
         var votes = game.Players.Select(p => p.OriginalVote).ToList();
-        Console.WriteLine($"[DEBUG] Original votes: [{string.Join(", ", votes)}]");
+        _logger.LogDebug("Original votes: [{OriginalVotes}]", string.Join(", ", votes));
         
         if (game.ActiveJokers.Any() && votes.Any())
         {
@@ -197,7 +220,7 @@ public class GameService
             };
             
             var finalVotes = _jokerProcessor.ApplyJokers(context);
-            Console.WriteLine($"[DEBUG] Final votes after jokers: [{string.Join(", ", finalVotes)}]");
+            _logger.LogDebug("Final votes after jokers: [{FinalVotes}]", string.Join(", ", finalVotes));
             
             for (int i = 0; i < game.Players.Count; i++)
             {
@@ -207,7 +230,7 @@ public class GameService
         else
         {
             // No jokers or no votes - just copy original votes to final votes
-            Console.WriteLine($"[DEBUG] No jokers or no votes - copying original to final");
+            _logger.LogDebug("No jokers or no votes - copying original to final");
             for (int i = 0; i < game.Players.Count; i++)
             {
                 game.Players[i].FinalVote = game.Players[i].OriginalVote;
@@ -218,9 +241,18 @@ public class GameService
         game.LastUpdate = DateTime.UtcNow;
         games[game.GameId] = game;
         
-        Console.WriteLine($"[DEBUG] Saving game state - Phase: {game.Phase}");
+        // Log round completion metrics
+        var finalVotesList = string.Join(",", game.Players.Select(p => p.FinalVote));
+        var originalVotesList = string.Join(",", game.Players.Select(p => p.OriginalVote));
+        var jokersList = string.Join(",", game.ActiveJokers.Select(j => j.Name));
+        
+        _logger.LogInformation("Round completed for game {GameId}", game.GameId);
+        _logger.LogInformation("METRIC: round_completed, game_id={GameId}, player_count={PlayerCount}, original_votes={OriginalVotes}, final_votes={FinalVotes}, jokers_used={JokersUsed}", 
+            game.GameId, game.Players.Count, originalVotesList, finalVotesList, jokersList);
+        
+        _logger.LogDebug("Saving game state - Phase: {Phase}", game.Phase);
         await SaveAllGamesAsync(games);
-        Console.WriteLine($"[DEBUG] Game state saved successfully");
+        _logger.LogDebug("Game state saved successfully");
     }
     
     public async Task StartNewRoundAsync(string adminCode)
