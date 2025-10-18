@@ -96,13 +96,9 @@ else
                         {
                             <div class="alert alert-info">
                                 <strong>@Localizer["SharePlayerUrl"]:</strong>
-                                <div class="input-group mt-2">
+                                <div class="mt-2">
                                     <input type="text" class="form-control" readonly 
                                            value="@GetPlayerUrlWithLanguage()" />
-                                    <button class="btn btn-outline-light" type="button" 
-                                            @onclick="@(() => CopyToClipboard(GetPlayerUrlWithLanguage()))">
-                                        @Localizer["Copy"]
-                                    </button>
                                 </div>
                             </div>
                         }
@@ -373,11 +369,6 @@ else
         await GameService.StartNewRoundAsync(game.AdminCode);
     }
     
-    private async Task CopyToClipboard(string text)
-    {
-        await Task.Run(() => {});
-    }
-    
     private string GetPlayerUrlWithLanguage()
     {
         if (game == null) return "";
@@ -411,3 +402,4 @@ else
         refreshTimer?.Dispose();
     }
 }
+
