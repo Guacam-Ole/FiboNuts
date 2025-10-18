@@ -1,5 +1,7 @@
 # 🃏 Balatro Planning Poker
 
+> **🔬 Vibe Coding Experiment**: This application was created as part of an experiment about "vibe coding" - a development approach that emphasizes intuitive, flow-state programming. A detailed description and results of this experiment can be found at [https://dotnet.work/en/vibe-coding-an-experiment](https://dotnet.work/en/vibe-coding-an-experiment).
+
 A modern, interactive planning poker application inspired by the card game mechanics of Balatro. This tool helps development teams estimate user stories and tasks using a fun, gamified approach with playing cards and randomized jokers that can modify final estimates.
 
 ## Features
