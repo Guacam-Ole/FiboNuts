@@ -20,6 +20,9 @@ FROM nginx:alpine
 # Copy the published files to nginx web directory
 COPY --from=build /app/out/wwwroot /usr/share/nginx/html
 
+# Ensure screenshot.png is copied from source wwwroot to final image
+COPY --from=build /app/wwwroot/screenshot.png /usr/share/nginx/html/screenshot.png
+
 # Copy custom nginx configuration if needed
 COPY nginx.conf /etc/nginx/nginx.conf
 

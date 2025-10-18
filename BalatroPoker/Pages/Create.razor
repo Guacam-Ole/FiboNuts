@@ -67,25 +67,17 @@
                     
                     <div class="mb-3">
                         <strong>@Localizer["AdminUrl"]:</strong>
-                        <div class="input-group">
+                        <div class="mt-2">
                             <input type="text" class="form-control" readonly 
                                    value="@GetAdminUrlWithLanguage()" />
-                            <button class="btn btn-outline-secondary" type="button" 
-                                    @onclick="@(() => CopyToClipboard(GetAdminUrlWithLanguage()))">
-                                Copy
-                            </button>
                         </div>
                     </div>
                     
                     <div class="mb-3">
                         <strong>@Localizer["PlayerUrl"]:</strong>
-                        <div class="input-group">
+                        <div class="mt-2">
                             <input type="text" class="form-control" readonly 
                                    value="@GetPlayerUrlWithLanguage()" />
-                            <button class="btn btn-outline-secondary" type="button" 
-                                    @onclick="@(() => CopyToClipboard(GetPlayerUrlWithLanguage()))">
-                                Copy
-                            </button>
                         </div>
                     </div>
                     
@@ -145,10 +137,6 @@
         await GameService.StartGameAsync(createdGame.AdminCode);
     }
     
-    private async Task CopyToClipboard(string text)
-    {
-        await Task.Run(() => {});
-    }
     
     private string GetAdminUrlWithLanguage()
     {
