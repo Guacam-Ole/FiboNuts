@@ -7,12 +7,14 @@ namespace BalatroPoker.Services;
 public class GameService
 {
     private readonly IJSRuntime _jsRuntime;
+    private readonly MetricsService _metricsService;
     private static readonly Random _random = new();
     private readonly JokerProcessor _jokerProcessor = new();
     
-    public GameService(IJSRuntime jsRuntime)
+    public GameService(IJSRuntime jsRuntime, MetricsService metricsService)
     {
         _jsRuntime = jsRuntime;
+        _metricsService = metricsService;
     }
     
     private async Task<Dictionary<string, GameState>> GetAllGamesAsync()
@@ -71,6 +73,10 @@ public class GameService
         
         games[game.GameId] = game;
         await SaveAllGamesAsync(games);
+        
+        // Record metrics
+        _metricsService.RecordGameCreated();
+        
         return game;
     }
     
@@ -105,6 +111,10 @@ public class GameService
         game.LastUpdate = DateTime.UtcNow;
         games[game.GameId] = game;
         await SaveAllGamesAsync(games);
+        
+        // Record metrics
+        _metricsService.RecordPlayerJoined();
+        
         return player;
     }
     
@@ -128,6 +138,9 @@ public class GameService
         game.LastUpdate = DateTime.UtcNow;
         games[game.GameId] = game;
         await SaveAllGamesAsync(games);
+        
+        // Record metrics
+        _metricsService.RecordVoteSubmitted(sum, selectedCards);
     }
     
     public async Task UpdateGameSettingsAsync(string adminCode, List<int> allowedValues, int jokerCount)
@@ -180,6 +193,12 @@ public class GameService
         game.ActiveJokers = _jokerProcessor.SelectRandomJokers(game.JokerCount, game.JokerCount);
         Console.WriteLine($"[DEBUG] Selected {game.ActiveJokers.Count} jokers: {string.Join(", ", game.ActiveJokers.Select(j => j.Name))}");
         
+        // Record joker usage metrics
+        foreach (var joker in game.ActiveJokers)
+        {
+            _metricsService.RecordJokerUsage(joker.Name);
+        }
+        
         // Apply jokers even if some players haven't voted (use 0 for unvoted players)
         var votes = game.Players.Select(p => p.OriginalVote).ToList();
         Console.WriteLine($"[DEBUG] Original votes: [{string.Join(", ", votes)}]");
@@ -215,6 +234,9 @@ public class GameService
         game.Phase = GamePhase.Revealed;
         game.LastUpdate = DateTime.UtcNow;
         games[game.GameId] = game;
+        
+        // Record round completion
+        _metricsService.RecordRoundPlayed();
         
         Console.WriteLine($"[DEBUG] Saving game state - Phase: {game.Phase}");
         await SaveAllGamesAsync(games);
