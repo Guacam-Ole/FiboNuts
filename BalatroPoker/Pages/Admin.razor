@@ -1,8 +1,12 @@
 @page "/admin"
 @using BalatroPoker.Models
 @using BalatroPoker.Services
+@using BalatroPoker.Resources
+@using Microsoft.Extensions.Localization
 @inject GameService GameService
 @inject NavigationManager Navigation
+@inject LocalizationService LocalizationService
+@inject IStringLocalizer<SharedResources> Localizer
 @implements IDisposable
 
 <PageTitle>Admin - Balatro Planning Poker</PageTitle>
@@ -11,32 +15,37 @@
 {
     <div class="container mt-4">
         <div class="alert alert-danger">
-            <h4>Game Not Found</h4>
-            <p>Invalid admin code. Please check your URL.</p>
-            <a href="/create" class="btn btn-primary">Create New Game</a>
+            <h4>@Localizer["GameNotFound"]</h4>
+            <p>@Localizer["InvalidPlayerCode"]</p>
+            <a href="/create" class="btn btn-primary">@Localizer["CreateGame"]</a>
         </div>
     </div>
 }
 else
 {
     <div class="container-fluid mt-4">
+        <!-- Language Selector -->
+        <div class="d-flex justify-content-end mb-3">
+            <LanguageSelector OnLanguageChanged="OnLanguageChanged" />
+        </div>
+        
         <div class="row">
             <div class="col-md-8">
-                <h1>🃏 Balatro Planning Poker - Admin View</h1>
+                <h1>🃏 @Localizer["AppTitle"] - @Localizer["AdminView"]</h1>
                 <div class="alert alert-secondary">
-                    <strong>Game Phase:</strong> @game.Phase 
+                    <strong>@Localizer["GamePhase"]:</strong> @game.Phase 
                     @if (game.ActiveJokers.Any())
                     {
-                        <span class="ms-3"><strong>Active Jokers:</strong> @game.ActiveJokers.Count</span>
+                        <span class="ms-3"><strong>@Localizer["AvailableJokers"]:</strong> @game.ActiveJokers.Count</span>
                     }
                 </div>
                 
                 <div class="card mb-4">
                     <div class="card-body">
-                        <h5>Game Settings</h5>
+                        <h5>@Localizer["GameSettings"]</h5>
                         <div class="row">
                             <div class="col-md-6">
-                                <label class="form-label">Allowed Values</label>
+                                <label class="form-label">@Localizer["AllowedValues"]</label>
                                 <div class="row">
                                     @foreach (var value in GameState.FibonacciValues)
                                     {
@@ -52,7 +61,7 @@ else
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">Jokers per Round: @game.JokerCount</label>
+                                <label class="form-label">@Localizer["JokerCount"]: @game.JokerCount</label>
                                 <input type="range" class="form-range" min="0" max="5" 
                                        @bind="game.JokerCount" @bind:event="oninput" 
                                        @onchange="UpdateSettings" />
@@ -64,19 +73,19 @@ else
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h5>Players (@game.Players.Count)</h5>
+                            <h5>@Localizer["Players"] (@game.Players.Count)</h5>
                             <div>
                                 @if (game.Phase == GamePhase.Voting)
                                 {
                                     <button class="btn btn-success me-2" @onclick="RevealCards" 
                                             disabled="@(!game.Players.Any(p => p.HasVoted))">
-                                        Reveal Cards & Apply Jokers 🎭
+                                        @Localizer["RevealCards"] 🎭
                                     </button>
                                 }
                                 else if (game.Phase == GamePhase.Revealed)
                                 {
                                     <button class="btn btn-primary me-2" @onclick="StartNewRound">
-                                        Start New Round 🔄
+                                        @Localizer["NewRound"] 🔄
                                     </button>
                                 }
                             </div>
@@ -85,13 +94,13 @@ else
                         @if (!game.Players.Any())
                         {
                             <div class="alert alert-info">
-                                <strong>Share this URL with players:</strong>
+                                <strong>@Localizer["SharePlayerUrl"]:</strong>
                                 <div class="input-group mt-2">
                                     <input type="text" class="form-control" readonly 
-                                           value="@($"{Navigation.BaseUri}play?code={game.PlayerCode}")" />
+                                           value="@GetPlayerUrlWithLanguage()" />
                                     <button class="btn btn-outline-light" type="button" 
-                                            @onclick="@(() => CopyToClipboard($"{Navigation.BaseUri}play?code={game.PlayerCode}"))">
-                                        Copy
+                                            @onclick="@(() => CopyToClipboard(GetPlayerUrlWithLanguage()))">
+                                        @Localizer["Copy"]
                                     </button>
                                 </div>
                             </div>
@@ -106,14 +115,14 @@ else
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <h6 class="card-title mb-1">@player.Name</h6>
                                                 <span class="badge @(player.HasVoted ? "bg-success" : "bg-warning")">
-                                                    @(player.HasVoted ? "Voted" : "Voting...")
+                                                    @(player.HasVoted ? Localizer["Voted"] : Localizer["Voting"])
                                                 </span>
                                             </div>
                                             
                                             @if (player.HasVoted)
                                             {
                                                 <div class="mt-2">
-                                                    <small class="text-muted">Selected Cards:</small>
+                                                    <small class="text-muted">@Localizer["SelectedCards"]:</small>
                                                     <div class="d-flex gap-1 mb-2">
                                                         @foreach (var card in player.SelectedCards)
                                                         {
@@ -283,6 +292,20 @@ else
     
     protected override async Task OnInitializedAsync()
     {
+        try
+        {
+            // Initialize localization with URL parameter support
+            var currentLanguage = await LocalizationService.GetCurrentLanguageAsync();
+            await LocalizationService.SetLanguageWithoutReloadAsync(currentLanguage);
+            
+            // Subscribe to language changes
+            LocalizationService.LanguageChanged += OnLanguageChangedInternal;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Localization error: {ex.Message}");
+        }
+        
         if (!string.IsNullOrEmpty(Code))
         {
             game = await GameService.GetGameByAdminCodeAsync(Code);
@@ -354,8 +377,36 @@ else
         await Task.Run(() => {});
     }
     
+    private string GetPlayerUrlWithLanguage()
+    {
+        if (game == null) return "";
+        
+        var baseUrl = $"{Navigation.BaseUri}play?code={game.PlayerCode}";
+        try
+        {
+            var currentLanguage = LocalizationService.GetCurrentLanguageAsync().Result;
+            return LocalizationService.AddLanguageToUrl(baseUrl, currentLanguage);
+        }
+        catch
+        {
+            return baseUrl;
+        }
+    }
+    
+    private async Task OnLanguageChanged(string languageCode)
+    {
+        // Language change is handled by the LocalizationService
+        StateHasChanged();
+    }
+    
+    private void OnLanguageChangedInternal()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+    
     public void Dispose()
     {
+        LocalizationService.LanguageChanged -= OnLanguageChangedInternal;
         refreshTimer?.Dispose();
     }
 }

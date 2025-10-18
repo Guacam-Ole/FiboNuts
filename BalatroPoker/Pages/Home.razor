@@ -25,7 +25,7 @@
                         <div class="card-body">
                             <h5 class="card-title">🎯 @Localizer["ProductOwner"]</h5>
                             <p class="card-text">@Localizer["ProductOwnerDesc"]</p>
-                            <a href="/create" class="btn btn-primary btn-lg">@Localizer["CreateGame"]</a>
+                            <a href="@GetCreateUrlWithLanguage()" class="btn btn-primary btn-lg">@Localizer["CreateGame"]</a>
                         </div>
                     </div>
                 </div>
@@ -114,5 +114,18 @@
     {
         // Language change is handled by the LocalizationService
         StateHasChanged();
+    }
+    
+    private string GetCreateUrlWithLanguage()
+    {
+        try
+        {
+            var currentLanguage = LocalizationService.GetCurrentLanguageAsync().Result;
+            return LocalizationService.AddLanguageToUrl("/create", currentLanguage);
+        }
+        catch
+        {
+            return "/create";
+        }
     }
 }

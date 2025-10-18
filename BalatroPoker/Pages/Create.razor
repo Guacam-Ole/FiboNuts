@@ -1,22 +1,32 @@
 @page "/create"
 @using BalatroPoker.Models
 @using BalatroPoker.Services
+@using BalatroPoker.Resources
+@using Microsoft.Extensions.Localization
 @inject GameService GameService
 @inject NavigationManager Navigation
+@inject LocalizationService LocalizationService
+@inject IStringLocalizer<SharedResources> Localizer
+@implements IDisposable
 
 <PageTitle>Create Game - Balatro Planning Poker</PageTitle>
 
 <div class="container mt-4">
-    <h1 class="text-center mb-4">🃏 Create Balatro Planning Poker Game</h1>
+    <!-- Language Selector -->
+    <div class="d-flex justify-content-end mb-3">
+        <LanguageSelector OnLanguageChanged="OnLanguageChanged" />
+    </div>
+    
+    <h1 class="text-center mb-4">🃏 @Localizer["CreateGame"] - @Localizer["AppTitle"]</h1>
     
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Game Settings</h5>
+                    <h5 class="card-title">@Localizer["GameSettings"]</h5>
                     
                     <div class="mb-3">
-                        <label class="form-label">Allowed Fibonacci Values</label>
+                        <label class="form-label">@Localizer["AllowedValues"]</label>
                         <div class="row">
                             @foreach (var value in GameState.FibonacciValues)
                             {
@@ -33,14 +43,14 @@
                     </div>
                     
                     <div class="mb-3">
-                        <label class="form-label">Number of Jokers per Round (0-5)</label>
+                        <label class="form-label">@Localizer["JokerCount"] (0-5)</label>
                         <input type="range" class="form-range" min="0" max="5" 
                                @bind="jokerCount" @bind:event="oninput" />
                         <div class="text-center"><strong>@jokerCount</strong></div>
                     </div>
                     
                     <button class="btn btn-primary btn-lg w-100" @onclick="CreateGame">
-                        Create Game 🎮
+                        @Localizer["CreateGame"] 🎮
                     </button>
                 </div>
             </div>
@@ -52,34 +62,34 @@
         <div class="row justify-content-center mt-4">
             <div class="col-md-8">
                 <div class="alert alert-success">
-                    <h5>🎉 Game Created Successfully!</h5>
+                    <h5>🎉 @Localizer["GameCreatedSuccessfully"]!</h5>
                     
                     <div class="mb-3">
-                        <strong>Admin URL (for you):</strong>
+                        <strong>@Localizer["AdminUrl"]:</strong>
                         <div class="input-group">
                             <input type="text" class="form-control" readonly 
-                                   value="@($"{Navigation.BaseUri}admin?code={createdGame.AdminCode}")" />
+                                   value="@GetAdminUrlWithLanguage()" />
                             <button class="btn btn-outline-secondary" type="button" 
-                                    @onclick="@(() => CopyToClipboard($"{Navigation.BaseUri}admin?code={createdGame.AdminCode}"))">
+                                    @onclick="@(() => CopyToClipboard(GetAdminUrlWithLanguage()))">
                                 Copy
                             </button>
                         </div>
                     </div>
                     
                     <div class="mb-3">
-                        <strong>Player URL (share with team):</strong>
+                        <strong>@Localizer["PlayerUrl"]:</strong>
                         <div class="input-group">
                             <input type="text" class="form-control" readonly 
-                                   value="@($"{Navigation.BaseUri}play?code={createdGame.PlayerCode}")" />
+                                   value="@GetPlayerUrlWithLanguage()" />
                             <button class="btn btn-outline-secondary" type="button" 
-                                    @onclick="@(() => CopyToClipboard($"{Navigation.BaseUri}play?code={createdGame.PlayerCode}"))">
+                                    @onclick="@(() => CopyToClipboard(GetPlayerUrlWithLanguage()))">
                                 Copy
                             </button>
                         </div>
                     </div>
                     
-                    <button class="btn btn-success" @onclick="@(() => Navigation.NavigateTo($"/admin?code={createdGame.AdminCode}"))">
-                        Go to Admin View 🎯
+                    <button class="btn btn-success" @onclick="@(() => Navigation.NavigateTo(GetAdminUrlWithLanguage()))">
+                        @Localizer["GoToAdminView"] 🎯
                     </button>
                 </div>
             </div>
@@ -91,6 +101,23 @@
     private List<int> allowedValues = new() { 1, 2, 3, 5, 8, 13, 21 };
     private int jokerCount = 1;
     private GameState? createdGame;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // Initialize localization with URL parameter support
+            var currentLanguage = await LocalizationService.GetCurrentLanguageAsync();
+            await LocalizationService.SetLanguageWithoutReloadAsync(currentLanguage);
+            
+            // Subscribe to language changes
+            LocalizationService.LanguageChanged += OnLanguageChangedInternal;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Localization error: {ex.Message}");
+        }
+    }
     
     private void ToggleValue(int value, bool isChecked)
     {
@@ -120,5 +147,53 @@
     private async Task CopyToClipboard(string text)
     {
         await Task.Run(() => {});
+    }
+    
+    private string GetAdminUrlWithLanguage()
+    {
+        if (createdGame == null) return "";
+        
+        var baseUrl = $"{Navigation.BaseUri}admin?code={createdGame.AdminCode}";
+        try
+        {
+            var currentLanguage = LocalizationService.GetCurrentLanguageAsync().Result;
+            return LocalizationService.AddLanguageToUrl(baseUrl, currentLanguage);
+        }
+        catch
+        {
+            return baseUrl;
+        }
+    }
+    
+    private string GetPlayerUrlWithLanguage()
+    {
+        if (createdGame == null) return "";
+        
+        var baseUrl = $"{Navigation.BaseUri}play?code={createdGame.PlayerCode}";
+        try
+        {
+            var currentLanguage = LocalizationService.GetCurrentLanguageAsync().Result;
+            return LocalizationService.AddLanguageToUrl(baseUrl, currentLanguage);
+        }
+        catch
+        {
+            return baseUrl;
+        }
+    }
+    
+    private async Task OnLanguageChanged(string languageCode)
+    {
+        // Language change is handled by the LocalizationService
+        StateHasChanged();
+    }
+    
+    private void OnLanguageChangedInternal()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+    
+    public void Dispose()
+    {
+        LocalizationService.LanguageChanged -= OnLanguageChangedInternal;
     }
 }

@@ -1,8 +1,12 @@
 @page "/play"
 @using BalatroPoker.Models
 @using BalatroPoker.Services
+@using BalatroPoker.Resources
+@using Microsoft.Extensions.Localization
 @inject GameService GameService
 @inject NavigationManager Navigation
+@inject LocalizationService LocalizationService
+@inject IStringLocalizer<SharedResources> Localizer
 @implements IDisposable
 
 <PageTitle>Play - Balatro Planning Poker</PageTitle>
@@ -11,8 +15,8 @@
 {
     <div class="container mt-4">
         <div class="alert alert-danger">
-            <h4>Game Not Found</h4>
-            <p>Invalid player code. Please check your URL.</p>
+            <h4>@Localizer["GameNotFound"]</h4>
+            <p>@Localizer["InvalidPlayerCode"]</p>
         </div>
     </div>
 }
@@ -23,17 +27,17 @@ else if (currentPlayer == null)
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-body">
-                        <h3 class="text-center mb-4">🃏 Join Balatro Planning Poker</h3>
+                        <h3 class="text-center mb-4">🃏 @Localizer["JoinGame"] @Localizer["AppTitle"]</h3>
                         
                         <div class="mb-3">
-                            <label class="form-label">Your Name</label>
+                            <label class="form-label">@Localizer["YourName"]</label>
                             <input type="text" class="form-control" @bind="playerName" 
                                    @onkeypress="@(async (e) => { if (e.Key == "Enter") await JoinGame(); })" />
                         </div>
                         
                         <button class="btn btn-primary w-100" @onclick="JoinGame" 
                                 disabled="@string.IsNullOrWhiteSpace(playerName)">
-                            Join Game 🎮
+                            @Localizer["JoinGame"] 🎮
                         </button>
                     </div>
                 </div>
@@ -44,17 +48,22 @@ else if (currentPlayer == null)
 else
 {
     <div class="container-fluid mt-4">
+        <!-- Language Selector -->
+        <div class="d-flex justify-content-end mb-3">
+            <LanguageSelector OnLanguageChanged="OnLanguageChanged" />
+        </div>
+        
         <div class="row">
             <div class="col-12">
-                <h1>🃏 Balatro Planning Poker</h1>
-                <h4 class="text-muted mb-4">Welcome, @currentPlayer.Name!</h4>
+                <h1>🃏 @Localizer["AppTitle"]</h1>
+                <h4 class="text-muted mb-4">@Localizer["Welcome"], @currentPlayer.Name!</h4>
                 
                 <!-- Player Info and Allowed Values in horizontal layout -->
                 <div class="row mb-4">
                     <div class="col-md-6">
                         <div class="card h-100">
                             <div class="card-body">
-                                <h5>Allowed Values</h5>
+                                <h5>@Localizer["AllowedValues"]</h5>
                                 <div class="d-flex gap-2 flex-wrap">
                                     @foreach (var value in game.AllowedValues)
                                     {
@@ -67,7 +76,7 @@ else
                     <div class="col-md-6">
                         <div class="card h-100">
                             <div class="card-body">
-                                <h5>Players (@game.Players.Count)</h5>
+                                <h5>@Localizer["Players"] (@game.Players.Count)</h5>
                                 <div class="d-flex gap-2 flex-wrap">
                                     @foreach (var player in game.Players)
                                     {
@@ -82,7 +91,7 @@ else
                                         <div class="progress" style="height: 6px;">
                                             <div class="progress-bar" style="width: @((game.Players.Count > 0 ? (double)game.Players.Count(p => p.HasVoted) / game.Players.Count * 100 : 0).ToString("F0"))%"></div>
                                         </div>
-                                        <small class="text-muted">@game.Players.Count(p => p.HasVoted) of @game.Players.Count voted</small>
+                                        <small class="text-muted">@Localizer["PlayersVoted", game.Players.Count(p => p.HasVoted), game.Players.Count]</small>
                                     </div>
                                 }
                             </div>
@@ -97,8 +106,8 @@ else
                     {
                         <div class="card mb-4">
                             <div class="card-body text-center">
-                                <h5>🎭 Available Jokers</h5>
-                                <p class="text-muted">@game.JokerCount joker(s) will be drawn after voting</p>
+                                <h5>🎭 @Localizer["AvailableJokers"]</h5>
+                                <p class="text-muted">@Localizer["JokersWillBeDrawn", game.JokerCount]</p>
                                 <div class="joker-placeholder">
                                     @for (int i = 0; i < game.JokerCount; i++)
                                     {
@@ -122,8 +131,8 @@ else
                     <!-- Playing Cards Section -->
                     <div class="card">
                         <div class="card-body">
-                            <h5>🎴 Your Hand</h5>
-                            <p class="text-muted">Select cards to combine and reach an allowed value</p>
+                            <h5>🎴 @Localizer["YourHand"]</h5>
+                            <p class="text-muted">@Localizer["SelectCardsToReachValue"]</p>
                             
                             <div class="playing-cards-container">
                                 @foreach (var card in currentPlayer.Cards)
@@ -136,13 +145,13 @@ else
                                 <div class="col-md-6">
                                     <div class="card bg-light">
                                         <div class="card-body text-center">
-                                            <h6>Current Sum</h6>
+                                            <h6>@Localizer["CurrentSum"]</h6>
                                             <div class="h3 @(IsValidSum() ? "text-success" : "text-danger")">
                                                 @currentPlayer.CurrentSum
                                             </div>
                                             @if (!IsValidSum() && currentPlayer.CurrentSum > 0)
                                             {
-                                                <small class="text-danger">Must match an allowed value</small>
+                                                <small class="text-danger">@Localizer["MustMatchAllowedValue"]</small>
                                             }
                                         </div>
                                     </div>
@@ -153,14 +162,14 @@ else
                                         <button class="btn btn-success btn-lg w-100" 
                                                 @onclick="SubmitVote" 
                                                 disabled="@(!IsValidSum())">
-                                            Confirm Vote ✓
+                                            @Localizer["ConfirmVote"] ✓
                                         </button>
                                     }
                                     else
                                     {
                                         <div class="alert alert-success w-100 mb-0">
-                                            <strong>Vote Submitted! ✓</strong>
-                                            <div>Your vote: @currentPlayer.OriginalVote</div>
+                                            <strong>@Localizer["VoteSubmitted"] ✓</strong>
+                                            <div>@Localizer["YourVote"]: @currentPlayer.OriginalVote</div>
                                         </div>
                                     }
                                 </div>
@@ -175,7 +184,7 @@ else
                     {
                         <div class="card mb-4">
                             <div class="card-body text-center">
-                                <h5>🎭 Jokers Revealed!</h5>
+                                <h5>🎭 @Localizer["RevealedJokers"]!</h5>
                                 <div class="revealed-jokers">
                                     @foreach (var joker in game.ActiveJokers)
                                     {
@@ -188,27 +197,27 @@ else
                     
                     <div class="card">
                         <div class="card-body">
-                            <h5>🎭 Voting Results</h5>
+                            <h5>🎭 @Localizer["VotingResults"]</h5>
                             
                             <div class="alert alert-success">
-                                <h6 class="mb-3"><strong>Voting Ended!</strong></h6>
+                                <h6 class="mb-3"><strong>@Localizer["VotingEnded"]!</strong></h6>
                                 
                                 @foreach (var player in game.Players.Where(p => p.HasVoted))
                                 {
                                     <div class="mb-2">
                                         <strong>@player.Name</strong> selected 
                                         <span class="badge @(player.Id == currentPlayer.Id ? "bg-primary" : "bg-secondary")">@player.OriginalVote</span>
-                                        @if (player.Id == currentPlayer.Id) { <small class="text-muted">(You)</small> }
+                                        @if (player.Id == currentPlayer.Id) { <small class="text-muted">(@Localizer["You"])</small> }
                                     </div>
                                 }
                             </div>
                             
                             <div class="alert alert-primary">
-                                <h6><strong>Final Values:</strong></h6>
+                                <h6><strong>@Localizer["FinalValues"]:</strong></h6>
                                 @foreach (var player in game.Players.Where(p => p.HasVoted))
                                 {
                                     <div class="mb-2 d-flex justify-content-between align-items-center @(player.Id == currentPlayer.Id ? "bg-light rounded p-2" : "")">
-                                        <span><strong>@player.Name:</strong> @if (player.Id == currentPlayer.Id) { <small>(You)</small> }</span>
+                                        <span><strong>@player.Name:</strong> @if (player.Id == currentPlayer.Id) { <small>(@Localizer["You"])</small> }</span>
                                         <span class="h5 mb-0">
                                             @if (player.OriginalVote != player.FinalVote)
                                             {
@@ -225,23 +234,23 @@ else
                             </div>
                             
                             <div class="mt-4">
-                                <h6>Team Statistics:</h6>
+                                <h6>@Localizer["TeamStatistics"]:</h6>
                                 <div class="row text-center">
                                     <div class="col-4">
                                         <div class="border rounded p-2">
-                                            <small class="text-muted">Average</small>
+                                            <small class="text-muted">@Localizer["Average"]</small>
                                             <div class="h5">@game.AverageVote.ToString("F1")</div>
                                         </div>
                                     </div>
                                     <div class="col-4">
                                         <div class="border rounded p-2">
-                                            <small class="text-muted">Min</small>
+                                            <small class="text-muted">@Localizer["Minimum"]</small>
                                             <div class="h5">@game.MinVote</div>
                                         </div>
                                     </div>
                                     <div class="col-4">
                                         <div class="border rounded p-2">
-                                            <small class="text-muted">Max</small>
+                                            <small class="text-muted">@Localizer["Maximum"]</small>
                                             <div class="h5">@game.MaxVote</div>
                                         </div>
                                     </div>
@@ -265,9 +274,24 @@ else
     
     protected override async Task OnInitializedAsync()
     {
+        try
+        {
+            // Initialize localization with URL parameter support
+            var currentLanguage = await LocalizationService.GetCurrentLanguageAsync();
+            await LocalizationService.SetLanguageWithoutReloadAsync(currentLanguage);
+            
+            // Subscribe to language changes
+            LocalizationService.LanguageChanged += OnLanguageChangedInternal;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Localization error: {ex.Message}");
+        }
+        
         if (!string.IsNullOrEmpty(Code))
         {
             game = await GameService.GetGameByPlayerCodeAsync(Code);
+            
         }
         
         refreshTimer = new Timer(async _ => {
@@ -362,8 +386,21 @@ else
         }
     }
     
+    private async Task OnLanguageChanged(string languageCode)
+    {
+        // Set the language without page reload and refresh the UI
+        await LocalizationService.SetLanguageWithoutReloadAsync(languageCode);
+        StateHasChanged();
+    }
+    
+    private void OnLanguageChangedInternal()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+    
     public void Dispose()
     {
+        LocalizationService.LanguageChanged -= OnLanguageChangedInternal;
         refreshTimer?.Dispose();
     }
 }

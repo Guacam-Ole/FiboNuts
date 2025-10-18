@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Localization;
+using Microsoft.JSInterop;
 using System.Globalization;
 using BalatroPoker;
 using BalatroPoker.Services;
@@ -16,29 +17,37 @@ builder.Services.AddSingleton<LocalizationService>();
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddSingleton<GameService>();
 
-// Configure supported cultures for Blazor WebAssembly  
-var supportedCultures = new[] { "en", "de", "fr", "it", "es" };
-var defaultCulture = "en";
-
-// Set default culture
-CultureInfo.DefaultThreadCurrentCulture = new CultureInfo(defaultCulture);
-CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo(defaultCulture);
-
 var app = builder.Build();
 
-// Initialize culture based on stored language preference after build
-var localizationService = app.Services.GetService<LocalizationService>();
-if (localizationService != null)
+// Initialize culture from URL or localStorage before the app starts
+await InitializeCultureAsync(app.Services);
+
+await app.RunAsync();
+
+static async Task InitializeCultureAsync(IServiceProvider services)
 {
     try
     {
-        var currentLanguage = await localizationService.GetCurrentLanguageAsync();
-        await localizationService.SetLanguageWithoutReloadAsync(currentLanguage);
+        var jsRuntime = services.GetRequiredService<IJSRuntime>();
+        
+        // Get language from URL parameter or localStorage
+        var urlLang = await jsRuntime.InvokeAsync<string>("eval", "new URLSearchParams(window.location.search).get('lang')");
+        var storedLang = await jsRuntime.InvokeAsync<string>("localStorage.getItem", "balatro-poker-language");
+        
+        var selectedLang = !string.IsNullOrEmpty(urlLang) ? urlLang : storedLang ?? "en";
+        
+        // Set culture before app initialization
+        if (new[] { "en", "de", "fr", "it", "es" }.Contains(selectedLang))
+        {
+            var culture = new CultureInfo(selectedLang);
+            CultureInfo.DefaultThreadCurrentCulture = culture;
+            CultureInfo.DefaultThreadCurrentUICulture = culture;
+            
+            Console.WriteLine($"Culture initialized to: {selectedLang}");
+        }
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"Culture initialization error: {ex.Message}");
+        Console.WriteLine($"Culture initialization failed: {ex.Message}");
     }
 }
-
-await app.RunAsync();

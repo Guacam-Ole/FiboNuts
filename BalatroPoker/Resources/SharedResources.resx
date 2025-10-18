@@ -101,6 +101,39 @@
   <data name="GameSettings" xml:space="preserve">
     <value>Game Settings</value>
   </data>
+  <data name="GameCreatedSuccessfully" xml:space="preserve">
+    <value>Game Created Successfully</value>
+  </data>
+  <data name="AdminUrl" xml:space="preserve">
+    <value>Admin URL (for you)</value>
+  </data>
+  <data name="PlayerUrl" xml:space="preserve">
+    <value>Player URL (share with team)</value>
+  </data>
+  <data name="GoToAdminView" xml:space="preserve">
+    <value>Go to Admin View</value>
+  </data>
+  <data name="AdminView" xml:space="preserve">
+    <value>Admin View</value>
+  </data>
+  <data name="GamePhase" xml:space="preserve">
+    <value>Game Phase</value>
+  </data>
+  <data name="SharePlayerUrl" xml:space="preserve">
+    <value>Share this URL with players</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="Voted" xml:space="preserve">
+    <value>Voted</value>
+  </data>
+  <data name="Voting" xml:space="preserve">
+    <value>Voting...</value>
+  </data>
+  <data name="SelectedCards" xml:space="preserve">
+    <value>Selected Cards</value>
+  </data>
   
   <!-- Messages -->
   <data name="MustMatchAllowedValue" xml:space="preserve">

@@ -5,6 +5,10 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
+    <BlazorWebAssemblyPreserveCollationData>false</BlazorWebAssemblyPreserveCollationData>
+    <InvariantGlobalization>false</InvariantGlobalization>
+    <RunAOTCompilation>false</RunAOTCompilation>
+    <BlazorEnableTimeZoneSupport>false</BlazorEnableTimeZoneSupport>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,5 +18,19 @@
     <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="8.0.11" />
     <PackageReference Include="Microsoft.AspNetCore.Localization" Version="2.2.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <!-- Force preload satellite assemblies -->
+    <BlazorWebAssemblyLazyLoad Remove="de\BalatroPoker.resources.dll" />
+    <BlazorWebAssemblyLazyLoad Remove="fr\BalatroPoker.resources.dll" />
+    <BlazorWebAssemblyLazyLoad Remove="it\BalatroPoker.resources.dll" />
+    <BlazorWebAssemblyLazyLoad Remove="es\BalatroPoker.resources.dll" />
+  </ItemGroup>
+  
+  <Target Name="ConfigureSatelliteAssemblies" BeforeTargets="Build">
+    <PropertyGroup>
+      <BlazorWebAssemblyLoadAllSatelliteAssemblies>true</BlazorWebAssemblyLoadAllSatelliteAssemblies>
+    </PropertyGroup>
+  </Target>
 
 </Project>
