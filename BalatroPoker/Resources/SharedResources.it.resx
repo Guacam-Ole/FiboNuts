@@ -179,4 +179,12 @@
   <data name="YourHand" xml:space="preserve">
     <value>La sua Mano</value>
   </data>
+  
+  <!-- Links -->
+  <data name="SourceCode" xml:space="preserve">
+    <value>Codice Sorgente</value>
+  </data>
+  <data name="WhyThisTool" xml:space="preserve">
+    <value>Perché questo strumento è stato sviluppato</value>
+  </data>
 </root>
