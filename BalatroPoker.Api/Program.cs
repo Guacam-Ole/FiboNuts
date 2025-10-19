@@ -1,6 +1,7 @@
 using BalatroPoker.Api.Services;
 using Serilog;
 using Serilog.Sinks.Grafana.Loki;
+using Prometheus;
 
 // Build configuration first to read settings
 var configuration = new ConfigurationBuilder()
@@ -55,8 +56,9 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Add our game service as singleton to maintain game state in memory
+// Add our services as singletons to maintain state in memory
 builder.Services.AddSingleton<GameService>();
+builder.Services.AddSingleton<MetricsService>();
 
 var app = builder.Build();
 
@@ -71,10 +73,17 @@ if (app.Environment.IsDevelopment())
 app.UseCors("AllowAll");
 
 app.UseRouting();
+
+// Add Prometheus metrics middleware
+app.UseHttpMetrics();
+
 app.MapControllers();
 
 // Health check endpoint
 app.MapGet("/health", () => "OK");
+
+// Prometheus metrics endpoint
+app.MapMetrics();
 
 try
 {

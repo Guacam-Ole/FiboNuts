@@ -8,12 +8,14 @@ public class GameService
 {
     private readonly ConcurrentDictionary<string, GameState> _games = new();
     private readonly ILogger<GameService> _logger;
+    private readonly MetricsService _metricsService;
     private static readonly Random _random = new();
     private readonly JokerProcessor _jokerProcessor = new();
     
-    public GameService(ILogger<GameService> logger)
+    public GameService(ILogger<GameService> logger, MetricsService metricsService)
     {
         _logger = logger;
+        _metricsService = metricsService;
     }
     
     public GameState? GetGame(string gameId)
@@ -52,6 +54,10 @@ public class GameService
         };
         
         _games.TryAdd(gameId, game);
+        
+        // Record metrics
+        _metricsService.RecordGameCreated();
+        UpdateActiveGameStats();
         
         _logger.LogInformation("Game created with ID {GameId}", game.GameId);
         _logger.LogInformation("METRIC: game_created, game_id={GameId}, allowed_values={AllowedValues}, joker_count={JokerCount}", 
@@ -92,6 +98,10 @@ public class GameService
         
         game.Players.Add(player);
         
+        // Record metrics
+        _metricsService.RecordPlayerJoined();
+        UpdateActiveGameStats();
+        
         _logger.LogInformation("Player {PlayerName} joined game {GameId}", name, game.GameId);
         _logger.LogInformation("METRIC: player_joined, game_id={GameId}, player_name={PlayerName}, player_count={PlayerCount}", 
             game.GameId, name, game.Players.Count);
@@ -130,6 +140,9 @@ public class GameService
         player.OriginalVote = sum;
         player.SelectedCards = selectedCards;
         player.HasVoted = true;
+        
+        // Record metrics
+        _metricsService.RecordVoteSubmitted(sum, selectedCards);
         
         _logger.LogInformation("Vote submitted by {PlayerName} in game {GameId}: {VoteValue} (cards: {Cards})", 
             player.Name, game.GameId, sum, cardDisplay);
@@ -208,6 +221,9 @@ public class GameService
         
         game.Phase = GamePhase.Revealed;
         
+        // Record metrics
+        _metricsService.RecordRoundCompleted(game);
+        
         _logger.LogInformation("Round completed for game {GameId}", game.GameId);
         _logger.LogInformation("METRIC: round_completed, game_id={GameId}, player_count={PlayerCount}, original_votes={OriginalVotes}, final_votes={FinalVotes}, jokers_used={JokersUsed}", 
             game.GameId, game.Players.Count, string.Join(",", votes), 
@@ -252,6 +268,9 @@ public class GameService
         var previousPhase = game.Phase;
         game.Phase = GamePhase.Voting;
         
+        // Record metrics
+        _metricsService.RecordVotingStarted();
+        
         _logger.LogInformation("Voting started for game {GameId} (changed from {PreviousPhase} to {NewPhase}). Players: {PlayerCount}", 
             game.GameId, previousPhase, game.Phase, game.Players.Count);
         _logger.LogInformation("METRIC: voting_started, game_id={GameId}, player_count={PlayerCount}", 
@@ -280,5 +299,13 @@ public class GameService
         };
         
         return cards;
+    }
+    
+    private void UpdateActiveGameStats()
+    {
+        var activeGamesCount = _games.Count;
+        var totalActivePlayers = _games.Values.Sum(g => g.Players.Count);
+        
+        _metricsService.UpdateActiveGameStats(activeGamesCount, totalActivePlayers);
     }
 }
