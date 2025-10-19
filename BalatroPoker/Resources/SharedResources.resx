@@ -220,4 +220,12 @@
   <data name="WhyThisTool" xml:space="preserve">
     <value>Why This Tool Was Developed</value>
   </data>
+  
+  <!-- Game Status -->
+  <data name="WaitingForGameToStart" xml:space="preserve">
+    <value>Waiting for game to start</value>
+  </data>
+  <data name="AdminWillStartVoting" xml:space="preserve">
+    <value>The admin will start voting when ready</value>
+  </data>
 </root>

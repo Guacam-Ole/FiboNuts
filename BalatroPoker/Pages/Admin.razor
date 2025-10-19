@@ -3,7 +3,7 @@
 @using BalatroPoker.Services
 @using BalatroPoker.Resources
 @using Microsoft.Extensions.Localization
-@inject GameService GameService
+@inject HttpGameService GameService
 @inject NavigationManager Navigation
 @inject LocalizationService LocalizationService
 @inject IStringLocalizer<SharedResources> Localizer
@@ -65,7 +65,7 @@ else
                                 <label class="form-label">@Localizer["JokerCount"]: @game.JokerCount</label>
                                 <input type="range" class="form-range" min="0" max="5" 
                                        @bind="game.JokerCount" @bind:event="oninput" 
-                                       @onchange="UpdateSettings" />
+                                       disabled />
                             </div>
                         </div>
                     </div>
@@ -76,7 +76,14 @@ else
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h5>@Localizer["Players"] (@game.Players.Count)</h5>
                             <div>
-                                @if (game.Phase == GamePhase.Voting)
+                                @if (game.Phase == GamePhase.Setup)
+                                {
+                                    <button class="btn btn-primary me-2" @onclick="StartVoting"
+                                            disabled="@(!game.Players.Any())">
+                                        @Localizer["StartVoting"] 🎯
+                                    </button>
+                                }
+                                else if (game.Phase == GamePhase.Voting)
                                 {
                                     <button class="btn btn-success me-2" @onclick="RevealCards" 
                                             disabled="@(!game.Players.Any(p => p.HasVoted))">
@@ -319,6 +326,8 @@ else
     
     private async Task ToggleAllowedValue(int value, bool isChecked)
     {
+        // Settings are now immutable after game creation in the new API
+        // This method is kept for UI consistency but doesn't change the backend
         if (game == null) return;
         
         if (isChecked)
@@ -331,13 +340,7 @@ else
             game.AllowedValues.Remove(value);
         }
         
-        await UpdateSettings();
-    }
-    
-    private async Task UpdateSettings()
-    {
-        if (game == null) return;
-        await GameService.UpdateGameSettingsAsync(game.AdminCode, game.AllowedValues, game.JokerCount);
+        StateHasChanged();
     }
     
     private async Task RevealCards()
@@ -367,6 +370,12 @@ else
     {
         if (game == null) return;
         await GameService.StartNewRoundAsync(game.AdminCode);
+    }
+    
+    private async Task StartVoting()
+    {
+        if (game == null) return;
+        await GameService.StartVotingAsync(game.AdminCode);
     }
     
     private string GetPlayerUrlWithLanguage()
