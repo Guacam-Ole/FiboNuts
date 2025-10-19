@@ -67,10 +67,10 @@ public class JokerProcessor
             new()
             {
                 Name = "Fibonacci",
-                Description = "Each card gives +8 bonus",
+                Description = "Ace, 2, 3, 5, 8 cards give +8 bonus",
                 Position = JokerPosition.Anywhere,
                 MinJokersRequired = 1,
-                SimpleEffect = context => ApplyCardCountBonus(context, 8)
+                SimpleEffect = context => ApplyFibonacciBonus(context, 8)
             },
             new()
             {
@@ -420,5 +420,20 @@ public class JokerProcessor
             return rightJoker.SimpleEffect(context);
         }
         return context.Votes;
+    }
+    
+    private static List<int> ApplyFibonacciBonus(JokerContext context, int bonusPerCard)
+    {
+        var fibonacciValues = new[] { 1, 2, 3, 5, 8 }; // Ace, 2, 3, 5, 8
+        var result = new List<int>();
+        
+        for (int i = 0; i < context.Votes.Count; i++)
+        {
+            var player = context.Players[i];
+            var fibonacciCardCount = player.SelectedCards.Count(c => fibonacciValues.Contains(c.Value));
+            result.Add(context.Votes[i] + (fibonacciCardCount * bonusPerCard));
+        }
+        
+        return result;
     }
 }
