@@ -3,7 +3,7 @@
 @using BalatroPoker.Services
 @using BalatroPoker.Resources
 @using Microsoft.Extensions.Localization
-@inject GameService GameService
+@inject HttpGameService GameService
 @inject NavigationManager Navigation
 @inject LocalizationService LocalizationService
 @inject IStringLocalizer<SharedResources> Localizer
@@ -132,9 +132,7 @@
             return;
         }
         
-        createdGame = await GameService.CreateGameAsync();
-        await GameService.UpdateGameSettingsAsync(createdGame.AdminCode, allowedValues, jokerCount);
-        await GameService.StartGameAsync(createdGame.AdminCode);
+        createdGame = await GameService.CreateGameAsync(allowedValues, jokerCount);
     }
     
     

@@ -7,49 +7,27 @@ using System.Reflection;
 using BalatroPoker;
 using BalatroPoker.Services;
 using Microsoft.Extensions.Logging;
-using Serilog;
-using Serilog.Events;
-using Serilog.Formatting.Compact;
-using Serilog.Sinks.Grafana.Loki;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-// Configure logging with Serilog and Loki
-builder.Services.AddLogging(cfg => cfg.SetMinimumLevel(LogLevel.Debug));
-builder.Services.AddSerilog(cfg =>
-{
-    cfg.MinimumLevel.Debug()
-        .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-        .Enrich.FromLogContext()
-        .Enrich.WithProperty("job", Assembly.GetEntryAssembly()?.GetName().Name)
-        .Enrich.WithProperty("service", Assembly.GetEntryAssembly()?.GetName().Name)
-        .Enrich.WithProperty("desktop", Environment.GetEnvironmentVariable("DESKTOP_SESSION"))
-        .Enrich.WithProperty("language", Environment.GetEnvironmentVariable("LANGUAGE"))
-        .Enrich.WithProperty("lc", Environment.GetEnvironmentVariable("LC_NAME"))
-        .Enrich.WithProperty("timezone", Environment.GetEnvironmentVariable("TZ"))
-        .Enrich.WithProperty("dotnetVersion", Environment.GetEnvironmentVariable("DOTNET_VERSION"))
-        .Enrich.WithProperty("inContainer", Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER"))
-        .Enrich.WithProperty("environment", builder.HostEnvironment.Environment)
-        .WriteTo.GrafanaLoki("http://thebeast:3100", propertiesAsLabels: ["job"]);
-    
-    if (Assembly.GetEntryAssembly()?.GetCustomAttribute<AssemblyConfigurationAttribute>()?.Configuration == "Debug")
-    {
-        cfg.WriteTo.Console(new RenderedCompactJsonFormatter());
-    }
-    else
-    {
-        cfg.WriteTo.Console();
-    }
-});
+// Configure logging for Blazor WebAssembly
+// Note: WebAssembly runs in browser and has limitations:
+// - Cannot directly connect to external services like Loki
+// - Console output is limited to browser developer tools
+// - For production logging, consider sending logs via HTTP API to your backend
+builder.Logging.SetMinimumLevel(LogLevel.Debug);
+builder.Logging.AddFilter("Microsoft", LogLevel.Warning);
 
 // Add localization services
 builder.Services.AddLocalization();
 builder.Services.AddSingleton<LocalizationService>();
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-builder.Services.AddSingleton<GameService>();
+
+// Register the HTTP-based game service instead of the localStorage one
+builder.Services.AddScoped<HttpGameService>();
 
 var app = builder.Build();
 

@@ -3,7 +3,7 @@
 @using BalatroPoker.Services
 @using BalatroPoker.Resources
 @using Microsoft.Extensions.Localization
-@inject GameService GameService
+@inject HttpGameService GameService
 @inject NavigationManager Navigation
 @inject LocalizationService LocalizationService
 @inject IStringLocalizer<SharedResources> Localizer
@@ -100,7 +100,7 @@ else
                     </div>
                 </div>
                 
-                @if (game.Phase == GamePhase.Voting)
+                @if (game.Phase == GamePhase.Voting || game.Phase == GamePhase.Setup)
                 {
                     <!-- Jokers Section at Top -->
                     @if (game.JokerCount > 0)
@@ -135,10 +135,18 @@ else
                             <h5>🎴 @Localizer["YourHand"]</h5>
                             <p class="text-muted">@Localizer["SelectCardsToReachValue"]</p>
                             
+                            
                             <div class="playing-cards-container">
-                                @foreach (var card in currentPlayer.Cards)
+                                @if (currentPlayer?.Cards != null)
                                 {
-                                    <PlayingCard Card="card" OnClick="@(async (selectedCard) => ToggleCard(selectedCard))" />
+                                    @foreach (var card in currentPlayer.Cards)
+                                    {
+                                        <PlayingCard Card="card" OnClick="@(async (selectedCard) => ToggleCard(selectedCard))" />
+                                    }
+                                }
+                                else
+                                {
+                                    <p class="text-danger">No cards available</p>
                                 }
                             </div>
                             
@@ -158,19 +166,29 @@ else
                                     </div>
                                 </div>
                                 <div class="col-md-6 d-flex align-items-center">
-                                    @if (!currentPlayer.HasVoted)
+                                    @if (game.Phase == GamePhase.Voting)
                                     {
-                                        <button class="btn btn-success btn-lg w-100" 
-                                                @onclick="SubmitVote" 
-                                                disabled="@(!IsValidSum())">
-                                            @Localizer["ConfirmVote"] ✓
-                                        </button>
+                                        @if (!currentPlayer.HasVoted)
+                                        {
+                                            <button class="btn btn-success btn-lg w-100" 
+                                                    @onclick="SubmitVote" 
+                                                    disabled="@(!IsValidSum())">
+                                                @Localizer["ConfirmVote"] ✓
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <div class="alert alert-success w-100 mb-0">
+                                                <strong>@Localizer["VoteSubmitted"] ✓</strong>
+                                                <div>@Localizer["YourVote"]: @currentPlayer.OriginalVote</div>
+                                            </div>
+                                        }
                                     }
-                                    else
+                                    else if (game.Phase == GamePhase.Setup)
                                     {
-                                        <div class="alert alert-success w-100 mb-0">
-                                            <strong>@Localizer["VoteSubmitted"] ✓</strong>
-                                            <div>@Localizer["YourVote"]: @currentPlayer.OriginalVote</div>
+                                        <div class="alert alert-info w-100 mb-0">
+                                            <strong>@Localizer["WaitingForGameToStart"]</strong>
+                                            <div>@Localizer["AdminWillStartVoting"]</div>
                                         </div>
                                     }
                                 </div>
@@ -333,11 +351,20 @@ else
         
         try
         {
-            currentPlayer = await GameService.AddPlayerAsync(Code!, playerName.Trim());
+            currentPlayer = await GameService.JoinGameAsync(Code!, playerName.Trim());
+            
+            if (currentPlayer == null)
+            {
+                Logger.LogError("JoinGameAsync returned null for playerCode: {Code}, playerName: {PlayerName}", Code, playerName.Trim());
+                return;
+            }
+            
+            Logger.LogInformation("Player joined successfully: {PlayerId}, Cards count: {CardCount}", currentPlayer.Id, currentPlayer.Cards?.Count ?? 0);
             await InvokeAsync(StateHasChanged);
         }
         catch (Exception ex)
         {
+            Logger.LogError(ex, "Error joining game with playerCode: {Code}, playerName: {PlayerName}", Code, playerName.Trim());
         }
     }
     
