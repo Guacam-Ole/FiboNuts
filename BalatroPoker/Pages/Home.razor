@@ -46,10 +46,10 @@
             <div class="mt-5 mb-4">
                 <div class="d-flex justify-content-center gap-3 flex-wrap">
                     <a href="https://github.com/Guacam-Ole/FiboNuts" class="btn btn-outline-secondary" target="_blank">
-                        <i class="fab fa-github me-2"></i>Source Code
+                        <i class="fab fa-github me-2"></i>@Localizer["SourceCode"]
                     </a>
-                    <a href="https://dotnet.work/en/vibe-coding-an-experiment" class="btn btn-outline-info" target="_blank">
-                        <i class="fas fa-info-circle me-2"></i>Why This Tool Was Developed
+                    <a href="@GetExperimentUrlWithLanguage()" class="btn btn-outline-info" target="_blank">
+                        <i class="fas fa-info-circle me-2"></i>@Localizer["WhyThisTool"]
                     </a>
                 </div>
             </div>
@@ -126,7 +126,8 @@
     private async Task OnLanguageChanged(string languageCode)
     {
         // Language change is handled by the LocalizationService
-        StateHasChanged();
+        // Force re-render to update dynamic URLs
+        await InvokeAsync(StateHasChanged);
     }
     
     private string GetCreateUrlWithLanguage()
@@ -139,6 +140,22 @@
         catch
         {
             return "/create";
+        }
+    }
+    
+    private string GetExperimentUrlWithLanguage()
+    {
+        try
+        {
+            // Use synchronous access to current culture
+            var currentCulture = System.Globalization.CultureInfo.CurrentUICulture;
+            var languageCode = currentCulture.TwoLetterISOLanguageName;
+            var urlLanguage = languageCode == "de" ? "de" : "en";
+            return $"https://dotnet.work/{urlLanguage}/vibe-coding-an-experiment";
+        }
+        catch
+        {
+            return "https://dotnet.work/en/vibe-coding-an-experiment";
         }
     }
 }
