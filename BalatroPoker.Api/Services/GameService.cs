@@ -62,13 +62,20 @@ public class GameService
     
     public Player? AddPlayer(string playerCode, string name)
     {
+        _logger.LogDebug("Attempting to add player {PlayerName} to game with playerCode {PlayerCode}", name, playerCode);
+        
         var game = GetGameByPlayerCode(playerCode);
-        if (game == null) return null;
+        if (game == null) 
+        {
+            _logger.LogWarning("Game not found for playerCode {PlayerCode} when adding player {PlayerName}", playerCode, name);
+            return null;
+        }
         
         // Check if player already exists
         var existingPlayer = game.Players.FirstOrDefault(p => p.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         if (existingPlayer != null)
         {
+            _logger.LogInformation("Player {PlayerName} already exists in game {GameId}, returning existing player", name, game.GameId);
             return existingPlayer;
         }
         
@@ -94,16 +101,29 @@ public class GameService
     
     public bool SubmitVote(string playerCode, string playerId, List<Card> selectedCards)
     {
+        _logger.LogDebug("Attempting vote submission for player {PlayerId} in game with playerCode {PlayerCode}", playerId, playerCode);
+        
         var game = GetGameByPlayerCode(playerCode);
-        if (game == null) return false;
+        if (game == null) 
+        {
+            _logger.LogWarning("Game not found for playerCode {PlayerCode} during vote submission", playerCode);
+            return false;
+        }
         
         var player = game.Players.FirstOrDefault(p => p.Id == playerId);
-        if (player == null) return false;
+        if (player == null) 
+        {
+            _logger.LogWarning("Player {PlayerId} not found in game {GameId} during vote submission", playerId, game.GameId);
+            return false;
+        }
         
         var sum = selectedCards.Sum(c => c.Value);
+        var cardDisplay = string.Join("+", selectedCards.Select(c => c.DisplayValue));
         
         if (!game.AllowedValues.Contains(sum))
         {
+            _logger.LogWarning("Invalid vote sum {Sum} (cards: {Cards}) by player {PlayerName} in game {GameId}. Allowed values: {AllowedValues}", 
+                sum, cardDisplay, player.Name, game.GameId, string.Join(",", game.AllowedValues));
             return false;
         }
         
@@ -111,9 +131,10 @@ public class GameService
         player.SelectedCards = selectedCards;
         player.HasVoted = true;
         
-        _logger.LogInformation("Vote submitted by {PlayerName} in game {GameId}: {VoteValue}", player.Name, game.GameId, sum);
-        _logger.LogInformation("METRIC: vote_submitted, game_id={GameId}, player_name={PlayerName}, vote_value={VoteValue}, cards={Cards}", 
-            game.GameId, player.Name, sum, string.Join(",", selectedCards.Select(c => $"{c.Value}{c.Suit}")));
+        _logger.LogInformation("Vote submitted by {PlayerName} in game {GameId}: {VoteValue} (cards: {Cards})", 
+            player.Name, game.GameId, sum, cardDisplay);
+        _logger.LogInformation("METRIC: vote_submitted, game_id={GameId}, player_name={PlayerName}, vote_value={VoteValue}, cards_display={CardsDisplay}, cards_detail={Cards}", 
+            game.GameId, player.Name, sum, cardDisplay, string.Join(",", selectedCards.Select(c => $"{c.DisplayValue}({c.Value}){c.Suit}")));
         
         return true;
     }
@@ -219,10 +240,23 @@ public class GameService
     
     public bool StartVoting(string adminCode)
     {
-        var game = GetGameByAdminCode(adminCode);
-        if (game == null) return false;
+        _logger.LogDebug("Attempting to start voting for game with adminCode {AdminCode}", adminCode);
         
+        var game = GetGameByAdminCode(adminCode);
+        if (game == null) 
+        {
+            _logger.LogWarning("Game not found for adminCode {AdminCode} when starting voting", adminCode);
+            return false;
+        }
+        
+        var previousPhase = game.Phase;
         game.Phase = GamePhase.Voting;
+        
+        _logger.LogInformation("Voting started for game {GameId} (changed from {PreviousPhase} to {NewPhase}). Players: {PlayerCount}", 
+            game.GameId, previousPhase, game.Phase, game.Players.Count);
+        _logger.LogInformation("METRIC: voting_started, game_id={GameId}, player_count={PlayerCount}", 
+            game.GameId, game.Players.Count);
+        
         return true;
     }
     

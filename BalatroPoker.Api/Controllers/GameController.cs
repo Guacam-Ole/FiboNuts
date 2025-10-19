@@ -20,14 +20,20 @@ public class GameController : ControllerBase
     [HttpPost("create")]
     public ActionResult<GameState> CreateGame([FromBody] CreateGameRequest request)
     {
+        _logger.LogInformation("HTTP: Create game request - AllowedValues: {AllowedValues}, JokerCount: {JokerCount}", 
+            string.Join(",", request.AllowedValues), request.JokerCount);
+        
         try
         {
             var game = _gameService.CreateGame(request.AllowedValues, request.JokerCount);
+            _logger.LogInformation("HTTP: Game created successfully - GameId: {GameId}, AdminCode: {AdminCode}, PlayerCode: {PlayerCode}", 
+                game.GameId, game.AdminCode, game.PlayerCode);
             return Ok(game);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error creating game");
+            _logger.LogError(ex, "HTTP: Error creating game with values {AllowedValues} and {JokerCount} jokers", 
+                string.Join(",", request.AllowedValues), request.JokerCount);
             return StatusCode(500, "Error creating game");
         }
     }
@@ -57,18 +63,26 @@ public class GameController : ControllerBase
     [HttpPost("player/{playerCode}/join")]
     public ActionResult<Player> JoinGame(string playerCode, [FromBody] JoinGameRequest request)
     {
+        _logger.LogInformation("HTTP: Player join request - PlayerCode: {PlayerCode}, Name: {PlayerName}", 
+            playerCode, request.Name);
+        
         try
         {
             var player = _gameService.AddPlayer(playerCode, request.Name);
             if (player == null)
             {
+                _logger.LogWarning("HTTP: Join game failed - Game not found for playerCode {PlayerCode}", playerCode);
                 return NotFound("Game not found");
             }
+            
+            _logger.LogInformation("HTTP: Player joined successfully - PlayerId: {PlayerId}, Name: {PlayerName}, Cards: {CardCount}", 
+                player.Id, player.Name, player.Cards.Count);
             return Ok(player);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error joining game");
+            _logger.LogError(ex, "HTTP: Error joining game - PlayerCode: {PlayerCode}, Name: {PlayerName}", 
+                playerCode, request.Name);
             return StatusCode(500, "Error joining game");
         }
     }

@@ -112,22 +112,10 @@ public class HttpGameService
             if (response.IsSuccessStatusCode)
             {
                 var responseJson = await response.Content.ReadAsStringAsync();
-                _logger.LogInformation("Join game API response: {ResponseJson}", responseJson);
-                
-                var options = new JsonSerializerOptions 
+                return JsonSerializer.Deserialize<Player>(responseJson, new JsonSerializerOptions 
                 { 
                     PropertyNameCaseInsensitive = true 
-                };
-                
-                var player = JsonSerializer.Deserialize<Player>(responseJson, options);
-                _logger.LogInformation("Deserialized player: ID={PlayerId}, Name={PlayerName}, Cards={CardCount}", 
-                    player?.Id, player?.Name, player?.Cards?.Count);
-                
-                return player;
-            }
-            else
-            {
-                _logger.LogError("Join game API call failed: {StatusCode}, {ReasonPhrase}", response.StatusCode, response.ReasonPhrase);
+                });
             }
             
             return null;
