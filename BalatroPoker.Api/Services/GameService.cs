@@ -190,12 +190,18 @@ public class GameService
         {
             // Apply jokers to get final votes
             var finalVotes = new List<int>(votes);
+            var votedPlayers = game.Players.Where(p => p.HasVoted).ToList();
             
             foreach (var joker in game.ActiveJokers)
             {
                 if (joker.SimpleEffect != null)
                 {
-                    var context = new JokerContext { Votes = finalVotes };
+                    var context = new JokerContext 
+                    { 
+                        Votes = finalVotes,
+                        Players = votedPlayers,
+                        ActiveJokers = game.ActiveJokers
+                    };
                     finalVotes = joker.SimpleEffect(context);
                 }
             }
@@ -203,7 +209,6 @@ public class GameService
             _logger.LogDebug("Final votes after jokers: [{FinalVotes}]", string.Join(", ", finalVotes));
             
             // Update players with final votes
-            var votedPlayers = game.Players.Where(p => p.HasVoted).ToList();
             for (int i = 0; i < votedPlayers.Count && i < finalVotes.Count; i++)
             {
                 votedPlayers[i].FinalVote = finalVotes[i];
