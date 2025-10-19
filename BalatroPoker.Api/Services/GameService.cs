@@ -229,17 +229,21 @@ public class GameService
     private List<Card> GeneratePlayerCards()
     {
         var suits = new[] { Spades, Hearts, Diamonds, Clubs };
-        var values = new[] { 2, 3, 5, 8, 11, 12, 13, 14 }; // 2,3,5,8,J,Q,K,A
         
-        var cards = new List<Card>();
-        for (int i = 0; i < 8; i++)
+        var cards = new List<Card>
         {
-            cards.Add(new Card 
-            { 
-                Value = values[_random.Next(values.Length)], 
-                Suit = suits[_random.Next(suits.Length)] 
-            });
-        }
+            // Ace (value 1)
+            new Card { Value = 1, Suit = suits[0], FaceType = "A" },
+            // Number cards
+            new Card { Value = 2, Suit = suits[1] },
+            new Card { Value = 3, Suit = suits[2] },
+            new Card { Value = 5, Suit = suits[3] },
+            new Card { Value = 8, Suit = suits[0] },
+            // Face cards (all value 10)
+            new Card { Value = 10, Suit = suits[1], FaceType = "J" },
+            new Card { Value = 10, Suit = suits[2], FaceType = "Q" },
+            new Card { Value = 10, Suit = suits[3], FaceType = "K" }
+        };
         
         return cards;
     }
