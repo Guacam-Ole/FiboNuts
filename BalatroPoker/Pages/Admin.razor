@@ -123,7 +123,7 @@ else
                                                 </span>
                                             </div>
                                             
-                                            @if (player.HasVoted)
+                                            @if (player.HasVoted && game.Phase == GamePhase.Revealed)
                                             {
                                                 <div class="mt-2">
                                                     <small class="text-muted">@Localizer["SelectedCards"]:</small>
@@ -135,28 +135,19 @@ else
                                                             </span>
                                                         }
                                                     </div>
-                                                    
-                                                    @if (game.Phase == GamePhase.Revealed)
-                                                    {
-                                                        <div class="vote-display">
-                                                            @if (player.OriginalVote != player.FinalVote)
-                                                            {
-                                                                <span class="text-decoration-line-through text-muted">@player.OriginalVote</span>
-                                                                <span class="mx-2">→</span>
-                                                                <strong class="text-primary">@player.FinalVote</strong>
-                                                            }
-                                                            else
-                                                            {
-                                                                <strong>@player.FinalVote</strong>
-                                                            }
-                                                        </div>
-                                                    }
-                                                    else
-                                                    {
-                                                        <div class="vote-display">
-                                                            <strong>@player.OriginalVote</strong>
-                                                        </div>
-                                                    }
+
+                                                    <div class="vote-display">
+                                                        @if (player.OriginalVote != player.FinalVote)
+                                                        {
+                                                            <span class="text-decoration-line-through text-muted">@player.OriginalVote</span>
+                                                            <span class="mx-2">→</span>
+                                                            <strong class="text-primary">@player.FinalVote</strong>
+                                                        }
+                                                        else
+                                                        {
+                                                            <strong>@player.FinalVote</strong>
+                                                        }
+                                                    </div>
                                                 </div>
                                             }
                                         </div>
