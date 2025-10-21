@@ -16,6 +16,7 @@ public class LocalizationService
     {
         { "en", ("English", "🇬🇧") },
         { "de", ("Deutsch", "🇩🇪") },
+        { "pt", ("Plattdeutsch", "⚓") },
         { "fr", ("Français", "🇫🇷") },
         { "it", ("Italiano", "🇮🇹") },
         { "es", ("Español", "🇪🇸") }
@@ -90,20 +91,17 @@ public class LocalizationService
                 var culture = new CultureInfo(languageCode);
                 CultureInfo.CurrentCulture = culture;
                 CultureInfo.CurrentUICulture = culture;
-                
+
                 // For Blazor WebAssembly, these are crucial
                 CultureInfo.DefaultThreadCurrentCulture = culture;
                 CultureInfo.DefaultThreadCurrentUICulture = culture;
-                
-                // Try to load satellite assembly for this culture
-                await TryLoadSatelliteAssembly(languageCode);
-                
+
                 // Store the language choice
                 await _jsRuntime.InvokeVoidAsync("localStorage.setItem", "balatro-poker-language", languageCode);
-                
+
                 // Update URL with language parameter
                 await UpdateUrlWithLanguageAsync(languageCode);
-                
+
                 // Notify components that language changed
                 LanguageChanged?.Invoke();
             }
@@ -160,49 +158,5 @@ public class LocalizationService
             
         var separator = baseUrl.Contains('?') ? "&" : "?";
         return $"{baseUrl}{separator}lang={languageCode}";
-    }
-    
-    private async Task TryLoadSatelliteAssembly(string languageCode)
-    {
-        try
-        {
-            if (languageCode == "en") return; // Default culture, no satellite assembly needed
-            
-            // Try to load satellite assembly using .NET Assembly loading
-            var assemblyName = $"BalatroPoker.resources";
-            var culture = new CultureInfo(languageCode);
-            
-            // Force assembly loading by trying to access it
-            var mainAssembly = Assembly.GetExecutingAssembly();
-            var satelliteAssembly = mainAssembly.GetSatelliteAssembly(culture);
-            
-            _logger.LogDebug("Loaded satellite assembly for {LanguageCode}: {AssemblyName}", languageCode, satelliteAssembly?.FullName);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogWarning(ex, "Failed to load satellite assembly for {LanguageCode}", languageCode);
-            
-            // Fallback: Try to use reflection to find and load the assembly
-            try
-            {
-                var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-                var satelliteAssembly = assemblies.FirstOrDefault(a => 
-                    a.FullName?.Contains($"BalatroPoker.resources") == true && 
-                    a.FullName?.Contains(languageCode) == true);
-                    
-                if (satelliteAssembly != null)
-                {
-                    _logger.LogDebug("Found existing satellite assembly: {AssemblyName}", satelliteAssembly.FullName);
-                }
-                else
-                {
-                    _logger.LogDebug("No satellite assembly found for {LanguageCode}", languageCode);
-                }
-            }
-            catch (Exception ex2)
-            {
-                _logger.LogWarning(ex2, "Reflection fallback failed");
-            }
-        }
     }
 }

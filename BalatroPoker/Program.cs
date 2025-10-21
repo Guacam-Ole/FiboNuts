@@ -49,14 +49,14 @@ static async Task InitializeCultureAsync(IServiceProvider services)
         var storedLang = await jsRuntime.InvokeAsync<string>("localStorage.getItem", "balatro-poker-language");
         
         var selectedLang = !string.IsNullOrEmpty(urlLang) ? urlLang : storedLang ?? "en";
-        
+
         // Set culture before app initialization
-        if (new[] { "en", "de", "fr", "it", "es" }.Contains(selectedLang))
+        if (new[] { "en", "de", "pt", "fr", "it", "es" }.Contains(selectedLang))
         {
             var culture = new CultureInfo(selectedLang);
             CultureInfo.DefaultThreadCurrentCulture = culture;
             CultureInfo.DefaultThreadCurrentUICulture = culture;
-            
+
             logger.LogInformation("Culture initialized to: {SelectedLanguage}", selectedLang);
         }
     }

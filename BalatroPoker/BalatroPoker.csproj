@@ -22,6 +22,7 @@
   <ItemGroup>
     <!-- Force preload satellite assemblies -->
     <BlazorWebAssemblyLazyLoad Remove="de\BalatroPoker.resources.dll" />
+    <BlazorWebAssemblyLazyLoad Remove="pt\BalatroPoker.resources.dll" />
     <BlazorWebAssemblyLazyLoad Remove="fr\BalatroPoker.resources.dll" />
     <BlazorWebAssemblyLazyLoad Remove="it\BalatroPoker.resources.dll" />
     <BlazorWebAssemblyLazyLoad Remove="es\BalatroPoker.resources.dll" />
