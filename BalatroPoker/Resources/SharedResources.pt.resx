@@ -12,362 +12,362 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  
+
   <!-- Common UI Elements -->
   <data name="AppTitle" xml:space="preserve">
     <value>Balatro Planning Poker</value>
   </data>
   <data name="Welcome" xml:space="preserve">
-    <value>Bienvenido</value>
+    <value>Willkamen</value>
   </data>
   <data name="Players" xml:space="preserve">
-    <value>Jugadores</value>
+    <value>Spelers</value>
   </data>
   <data name="AllowedValues" xml:space="preserve">
-    <value>Valores Permitidos</value>
+    <value>Erlauvte Weerten</value>
   </data>
   <data name="Jokers" xml:space="preserve">
-    <value>Comodines</value>
+    <value>Jokers</value>
   </data>
   <data name="AvailableJokers" xml:space="preserve">
-    <value>Comodines Disponibles</value>
+    <value>Verfögbore Jokers</value>
   </data>
   <data name="RevealedJokers" xml:space="preserve">
-    <value>¡Comodines Revelados!</value>
-  </data>
-  
-  <!-- Game Actions -->
-  <data name="CreateGame" xml:space="preserve">
-    <value>Crear Partida</value>
-  </data>
-  <data name="JoinGame" xml:space="preserve">
-    <value>Unirse a Partida</value>
-  </data>
-  <data name="StartVoting" xml:space="preserve">
-    <value>Iniciar Votación</value>
-  </data>
-  <data name="RevealCards" xml:space="preserve">
-    <value>Revelar Cartas &amp; Aplicar Comodines</value>
-  </data>
-  <data name="NewRound" xml:space="preserve">
-    <value>Nueva Ronda</value>
-  </data>
-  <data name="ConfirmVote" xml:space="preserve">
-    <value>Confirmar Voto</value>
-  </data>
-  <data name="VoteSubmitted" xml:space="preserve">
-    <value>¡Voto Enviado!</value>
-  </data>
-  
-  <!-- Game Status -->
-  <data name="CurrentSum" xml:space="preserve">
-    <value>Suma Actual</value>
-  </data>
-  <data name="YourVote" xml:space="preserve">
-    <value>Su voto</value>
-  </data>
-  <data name="VotingProgress" xml:space="preserve">
-    <value>Progreso de Votación</value>
-  </data>
-  <data name="VotingResults" xml:space="preserve">
-    <value>Resultados de Votación</value>
-  </data>
-  <data name="VotingEnded" xml:space="preserve">
-    <value>¡Votación Finalizada!</value>
-  </data>
-  <data name="FinalValues" xml:space="preserve">
-    <value>Valores Finales</value>
-  </data>
-  <data name="TeamStatistics" xml:space="preserve">
-    <value>Estadísticas del Equipo</value>
-  </data>
-  <data name="Average" xml:space="preserve">
-    <value>Promedio</value>
-  </data>
-  <data name="Minimum" xml:space="preserve">
-    <value>Mín</value>
-  </data>
-  <data name="Maximum" xml:space="preserve">
-    <value>Máx</value>
-  </data>
-  
-  <!-- Forms -->
-  <data name="YourName" xml:space="preserve">
-    <value>Su Nombre</value>
-  </data>
-  <data name="JokerCount" xml:space="preserve">
-    <value>Número de Comodines</value>
-  </data>
-  <data name="GameSettings" xml:space="preserve">
-    <value>Configuración de Partida</value>
-  </data>
-  
-  <!-- Messages -->
-  <data name="MustMatchAllowedValue" xml:space="preserve">
-    <value>Debe coincidir con un valor permitido</value>
-  </data>
-  <data name="SelectCardsToReachValue" xml:space="preserve">
-    <value>Seleccione cartas para combinar y alcanzar un valor permitido</value>
-  </data>
-  <data name="JokersWillBeDrawn" xml:space="preserve">
-    <value>Se robarán {0} comodín(es) después de la votación</value>
-  </data>
-  <data name="PlayersVoted" xml:space="preserve">
-    <value>{0} de {1} votaron</value>
-  </data>
-  
-  <!-- Roles -->
-  <data name="ProductOwner" xml:space="preserve">
-    <value>Propietario del Producto</value>
-  </data>
-  <data name="Player" xml:space="preserve">
-    <value>Jugador</value>
-  </data>
-  <data name="You" xml:space="preserve">
-    <value>Usted</value>
-  </data>
-  
-  <!-- How It Works -->
-  <data name="HowItWorks" xml:space="preserve">
-    <value>Cómo Funciona</value>
-  </data>
-  <data name="SelectCards" xml:space="preserve">
-    <value>Seleccionar Cartas</value>
-  </data>
-  <data name="SelectCardsDesc" xml:space="preserve">
-    <value>Combine cartas de juego (2,3,5,8,J,Q,K,A) para alcanzar valores de Fibonacci permitidos</value>
-  </data>
-  <data name="RandomJokers" xml:space="preserve">
-    <value>Comodines Aleatorios</value>
-  </data>
-  <data name="RandomJokersDesc" xml:space="preserve">
-    <value>Los comodines aparecen y transforman los votos de maneras inesperadas - ¡como en Balatro!</value>
-  </data>
-  <data name="FinalResults" xml:space="preserve">
-    <value>Resultados Finales</value>
-  </data>
-  <data name="FinalResultsDesc" xml:space="preserve">
-    <value>Vea los votos originales vs transformados y las estadísticas del equipo</value>
-  </data>
-  
-  <!-- Descriptions -->
-  <data name="ProductOwnerDesc" xml:space="preserve">
-    <value>Cree y gestione sesiones de planning poker con configuraciones personalizables y monitoreo en tiempo real.</value>
-  </data>
-  <data name="PlayerDesc" xml:space="preserve">
-    <value>Únase a una sesión de planning poker con su código único de jugador y comience a votar con cartas!</value>
-  </data>
-  <data name="GetPlayerUrl" xml:space="preserve">
-    <value>Obtenga la URL del jugador de su Propietario del Producto</value>
-  </data>
-  <data name="AppDescription" xml:space="preserve">
-    <value>Planning poker con mecánicas de cartas al estilo Balatro y comodines que transforman sus votos!</value>
-  </data>
-  <data name="JokersShowcaseDesc" xml:space="preserve">
-    <value>Aquí están todos los comodines que pueden aparecer en sus partidas:</value>
-  </data>
-  
-  <!-- Errors -->
-  <data name="GameNotFound" xml:space="preserve">
-    <value>Partida No Encontrada</value>
-  </data>
-  <data name="InvalidPlayerCode" xml:space="preserve">
-    <value>Código de jugador inválido. Por favor verifique su URL.</value>
-  </data>
-  
-  <!-- Cards -->
-  <data name="YourHand" xml:space="preserve">
-    <value>Su Mano</value>
-  </data>
-  
-  <!-- Links -->
-  <data name="SourceCode" xml:space="preserve">
-    <value>Código Fuente</value>
-  </data>
-  <data name="WhyThisTool" xml:space="preserve">
-    <value>Por qué se desarrolló esta herramienta</value>
-  </data>
-
-  <!-- Missing Common Entries -->
-  <data name="GameCreatedSuccessfully" xml:space="preserve">
-    <value>Juego creado exitosamente</value>
-  </data>
-  <data name="AdminUrl" xml:space="preserve">
-    <value>URL de Admin (para ti)</value>
-  </data>
-  <data name="PlayerUrl" xml:space="preserve">
-    <value>URL de Jugador (compartir con equipo)</value>
-  </data>
-  <data name="GoToAdminView" xml:space="preserve">
-    <value>Ir a Vista de Admin</value>
-  </data>
-  <data name="AdminView" xml:space="preserve">
-    <value>Vista de Admin</value>
-  </data>
-  <data name="GamePhase" xml:space="preserve">
-    <value>Fase del Juego</value>
-  </data>
-  <data name="SharePlayerUrl" xml:space="preserve">
-    <value>Comparte esta URL con los jugadores</value>
-  </data>
-  <data name="Copy" xml:space="preserve">
-    <value>Copiar</value>
-  </data>
-  <data name="Voted" xml:space="preserve">
-    <value>Votó</value>
-  </data>
-  <data name="Voting" xml:space="preserve">
-    <value>Votando...</value>
-  </data>
-  <data name="SelectedCards" xml:space="preserve">
-    <value>Cartas Seleccionadas</value>
-  </data>
-  <data name="Selected" xml:space="preserve">
-    <value>seleccionó</value>
-  </data>
-  <data name="WaitingForGameToStart" xml:space="preserve">
-    <value>Esperando que el juego comience</value>
-  </data>
-  <data name="AdminWillStartVoting" xml:space="preserve">
-    <value>El admin iniciará la votación cuando esté listo</value>
-  </data>
-  <data name="Statistics" xml:space="preserve">
-    <value>Estadísticas</value>
+    <value>Jokers upteckt!</value>
   </data>
   <data name="ActiveJokers" xml:space="preserve">
-    <value>Comodines Activos</value>
+    <value>Aktive Jokers</value>
+  </data>
+
+  <!-- Game Actions -->
+  <data name="CreateGame" xml:space="preserve">
+    <value>Speel opstellen</value>
+  </data>
+  <data name="JoinGame" xml:space="preserve">
+    <value>Bi't Speel dörkamen</value>
+  </data>
+  <data name="StartVoting" xml:space="preserve">
+    <value>Afstimmen anfangen</value>
+  </data>
+  <data name="RevealCards" xml:space="preserve">
+    <value>Korten uptecken &amp; Jokers anwennen</value>
+  </data>
+  <data name="NewRound" xml:space="preserve">
+    <value>Neje Runne</value>
+  </data>
+  <data name="ConfirmVote" xml:space="preserve">
+    <value>Stimm bestätigen</value>
+  </data>
+  <data name="VoteSubmitted" xml:space="preserve">
+    <value>Stimm afgeven!</value>
+  </data>
+
+  <!-- Game Status -->
+  <data name="CurrentSum" xml:space="preserve">
+    <value>Aktuelle Summ</value>
+  </data>
+  <data name="YourVote" xml:space="preserve">
+    <value>Dien Stimm</value>
+  </data>
+  <data name="VotingProgress" xml:space="preserve">
+    <value>Afstimm-Vörankamen</value>
+  </data>
+  <data name="VotingResults" xml:space="preserve">
+    <value>Afstimm-Resultaten</value>
+  </data>
+  <data name="VotingEnded" xml:space="preserve">
+    <value>Afstimmen beennt!</value>
+  </data>
+  <data name="FinalValues" xml:space="preserve">
+    <value>Endweerten</value>
+  </data>
+  <data name="TeamStatistics" xml:space="preserve">
+    <value>Team-Statistiken</value>
+  </data>
+  <data name="Average" xml:space="preserve">
+    <value>Döörsnitt</value>
+  </data>
+  <data name="Minimum" xml:space="preserve">
+    <value>Min</value>
+  </data>
+  <data name="Maximum" xml:space="preserve">
+    <value>Max</value>
+  </data>
+
+  <!-- Forms -->
+  <data name="YourName" xml:space="preserve">
+    <value>Dien Naam</value>
+  </data>
+  <data name="JokerCount" xml:space="preserve">
+    <value>Antall Jokers</value>
+  </data>
+  <data name="GameSettings" xml:space="preserve">
+    <value>Speel-Instellungen</value>
+  </data>
+  <data name="GameCreatedSuccessfully" xml:space="preserve">
+    <value>Speel good opstellt</value>
+  </data>
+  <data name="AdminUrl" xml:space="preserve">
+    <value>Admin-URL (för di)</value>
+  </data>
+  <data name="PlayerUrl" xml:space="preserve">
+    <value>Speler-URL (mit't Team delen)</value>
+  </data>
+  <data name="GoToAdminView" xml:space="preserve">
+    <value>To de Admin-Ansicht</value>
+  </data>
+  <data name="AdminView" xml:space="preserve">
+    <value>Admin-Ansicht</value>
+  </data>
+  <data name="GamePhase" xml:space="preserve">
+    <value>Speel-Phaas</value>
+  </data>
+  <data name="SharePlayerUrl" xml:space="preserve">
+    <value>Disse URL mit Spelers delen</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Koperen</value>
+  </data>
+  <data name="Voted" xml:space="preserve">
+    <value>Afstimmt</value>
+  </data>
+  <data name="Voting" xml:space="preserve">
+    <value>Stimmt af...</value>
+  </data>
+  <data name="SelectedCards" xml:space="preserve">
+    <value>Utsöchte Korten</value>
+  </data>
+  <data name="Selected" xml:space="preserve">
+    <value>utsöcht</value>
+  </data>
+
+  <!-- Messages -->
+  <data name="MustMatchAllowedValue" xml:space="preserve">
+    <value>Mutt en erlauvten Weert passen</value>
+  </data>
+  <data name="SelectCardsToReachValue" xml:space="preserve">
+    <value>Söök Korten ut un kombineer se, üm en erlauvten Weert to kriegen</value>
+  </data>
+  <data name="JokersWillBeDrawn" xml:space="preserve">
+    <value>{0} Joker(s) warrt na't Afstimmen trucken</value>
+  </data>
+  <data name="PlayersVoted" xml:space="preserve">
+    <value>{0} vun {1} hebbt afstimmt</value>
+  </data>
+
+  <!-- Roles -->
+  <data name="ProductOwner" xml:space="preserve">
+    <value>Product Owner</value>
+  </data>
+  <data name="Player" xml:space="preserve">
+    <value>Speler</value>
+  </data>
+  <data name="You" xml:space="preserve">
+    <value>Du</value>
+  </data>
+
+  <!-- How It Works -->
+  <data name="HowItWorks" xml:space="preserve">
+    <value>So geiht dat</value>
+  </data>
+  <data name="SelectCards" xml:space="preserve">
+    <value>Korten utsöken</value>
+  </data>
+  <data name="SelectCardsDesc" xml:space="preserve">
+    <value>Kombineer Speelkorten (2,3,5,8,B,D,K,A) üm erlauvte Fibonacci-Weerten to kriegen</value>
+  </data>
+  <data name="RandomJokers" xml:space="preserve">
+    <value>Tofällige Jokers</value>
+  </data>
+  <data name="RandomJokersDesc" xml:space="preserve">
+    <value>Jokers duukt op un ännert Stimmen op unverwachte Wies - just as Balatro!</value>
+  </data>
+  <data name="FinalResults" xml:space="preserve">
+    <value>Endresultaten</value>
+  </data>
+  <data name="FinalResultsDesc" xml:space="preserve">
+    <value>Kiek di de originalen un ännerten Stimmen an un ok de Team-Statistiken</value>
+  </data>
+
+  <!-- Descriptions -->
+  <data name="ProductOwnerDesc" xml:space="preserve">
+    <value>Stell Planning Poker Sessionen op mit anpassbore Instellungen un Echt-Tied-Överwaken.</value>
+  </data>
+  <data name="PlayerDesc" xml:space="preserve">
+    <value>Kam bi en Planning Poker Session mit dien eegen Speler-Code un fang an mit Korten to stimmen!</value>
+  </data>
+  <data name="GetPlayerUrl" xml:space="preserve">
+    <value>Haal di de Speler-URL vun dien Product Owner</value>
+  </data>
+  <data name="AppDescription" xml:space="preserve">
+    <value>Planning Poker mit Balatro-Korten-Mechaniken un Jokers de dien Stimmen ännert!</value>
+  </data>
+  <data name="JokersShowcaseDesc" xml:space="preserve">
+    <value>Hier sünd all de Jokers de in dien Speelen opdüken künnt:</value>
+  </data>
+
+  <!-- Errors -->
+  <data name="GameNotFound" xml:space="preserve">
+    <value>Speel nich funnen</value>
+  </data>
+  <data name="InvalidPlayerCode" xml:space="preserve">
+    <value>Ungülligen Speler-Code. Bitte kiek dien URL na.</value>
+  </data>
+
+  <!-- Cards -->
+  <data name="YourHand" xml:space="preserve">
+    <value>Dien Hand</value>
+  </data>
+
+  <!-- Links -->
+  <data name="SourceCode" xml:space="preserve">
+    <value>Quellcode</value>
+  </data>
+  <data name="WhyThisTool" xml:space="preserve">
+    <value>Worüm dit Warktüüg ontwikkelt wurrn is</value>
+  </data>
+
+  <!-- Game Status -->
+  <data name="WaitingForGameToStart" xml:space="preserve">
+    <value>Töövt op't Speelstart</value>
+  </data>
+  <data name="AdminWillStartVoting" xml:space="preserve">
+    <value>De Admin fangt dat Afstimmen an, wenn he so wiet is</value>
+  </data>
+  <data name="Statistics" xml:space="preserve">
+    <value>Statistiken</value>
   </data>
 
   <!-- Game Phases -->
   <data name="PhaseSetup" xml:space="preserve">
-    <value>Configuración</value>
+    <value>Vörbereeden</value>
   </data>
   <data name="PhaseVoting" xml:space="preserve">
-    <value>Votación</value>
+    <value>Afstimmen</value>
   </data>
   <data name="PhaseRevealed" xml:space="preserve">
-    <value>Revelado</value>
+    <value>Upteckt</value>
   </data>
 
   <!-- Joker Names -->
   <data name="JokerName_Joker" xml:space="preserve">
-    <value>Comodín</value>
+    <value>Joker</value>
   </data>
   <data name="JokerDesc_Joker" xml:space="preserve">
-    <value>Añade +4 a cada voto</value>
+    <value>Deit +4 to jede Stimm</value>
   </data>
   <data name="JokerName_GreedyJoker" xml:space="preserve">
-    <value>Comodín Codicioso</value>
+    <value>Gierige Joker</value>
   </data>
   <data name="JokerDesc_GreedyJoker" xml:space="preserve">
-    <value>Cada carta de Diamantes da +3 de bonificación</value>
+    <value>Jede Karo-Kort gifft +3 Bonus</value>
   </data>
   <data name="JokerName_LustyJoker" xml:space="preserve">
-    <value>Comodín Lujurioso</value>
+    <value>Lustvolle Joker</value>
   </data>
   <data name="JokerDesc_LustyJoker" xml:space="preserve">
-    <value>Cada Corazón da +3 de bonificación</value>
+    <value>Jede Hart gifft +3 Bonus</value>
   </data>
   <data name="JokerName_WrathfulJoker" xml:space="preserve">
-    <value>Comodín Iracundo</value>
+    <value>Böse Joker</value>
   </data>
   <data name="JokerDesc_WrathfulJoker" xml:space="preserve">
-    <value>Cada Pica da +3 de bonificación</value>
+    <value>Jede Piek gifft +3 Bonus</value>
   </data>
   <data name="JokerName_GluttonousJoker" xml:space="preserve">
-    <value>Comodín Glotón</value>
+    <value>Gefrätige Joker</value>
   </data>
   <data name="JokerDesc_GluttonousJoker" xml:space="preserve">
-    <value>Cada Trébol da +3 de bonificación</value>
+    <value>Jede Krüüz gifft +3 Bonus</value>
   </data>
   <data name="JokerName_Misprint" xml:space="preserve">
-    <value>Error de Impresión</value>
+    <value>Druckfehler</value>
   </data>
   <data name="JokerDesc_Misprint" xml:space="preserve">
-    <value>Bonificación aleatoria entre 1 y 23</value>
+    <value>Tofällige Bonus twüschen 1 un 23</value>
   </data>
   <data name="JokerName_Fibonacci" xml:space="preserve">
     <value>Fibonacci</value>
   </data>
   <data name="JokerDesc_Fibonacci" xml:space="preserve">
-    <value>Cada carta da +8 de bonificación</value>
+    <value>Jede Kort gifft +8 Bonus</value>
   </data>
   <data name="JokerName_ScaryFace" xml:space="preserve">
-    <value>Cara Aterradora</value>
+    <value>Gruulige Visaag</value>
   </data>
   <data name="JokerDesc_ScaryFace" xml:space="preserve">
-    <value>Cada figura da +30 puntos</value>
+    <value>Jede Bildkort gifft +30 Punkte</value>
   </data>
   <data name="JokerName_AbstractJoker" xml:space="preserve">
-    <value>Comodín Abstracto</value>
+    <value>Abstrakte Joker</value>
   </data>
   <data name="JokerDesc_AbstractJoker" xml:space="preserve">
-    <value>+3 por cada comodín activo</value>
+    <value>+3 för jede aktive Joker</value>
   </data>
   <data name="JokerName_Hack" xml:space="preserve">
-    <value>Hackeo</value>
+    <value>Hack</value>
   </data>
   <data name="JokerDesc_Hack" xml:space="preserve">
-    <value>2, 3 y 5 cuentan doble</value>
+    <value>2, 3 un 5 tellt dubbelt</value>
   </data>
   <data name="JokerName_GrosMichel" xml:space="preserve">
     <value>Gros Michel</value>
   </data>
   <data name="JokerDesc_GrosMichel" xml:space="preserve">
-    <value>+15 de bonificación a todos los votos</value>
+    <value>+15 Bonus för all Stimmen</value>
   </data>
   <data name="JokerName_EvenSteven" xml:space="preserve">
-    <value>Esteban Par</value>
+    <value>Even Steven</value>
   </data>
   <data name="JokerDesc_EvenSteven" xml:space="preserve">
-    <value>2 y 8 dan +4 de bonificación</value>
+    <value>2 un 8 gifft +4 Bonus</value>
   </data>
   <data name="JokerName_OddTodd" xml:space="preserve">
-    <value>Todd Impar</value>
+    <value>Uneven Todd</value>
   </data>
   <data name="JokerDesc_OddTodd" xml:space="preserve">
-    <value>Las cartas impares dan +31 puntos</value>
+    <value>Ungerode Korten gifft +31 Punkte</value>
   </data>
   <data name="JokerName_Scholar" xml:space="preserve">
-    <value>Erudito</value>
+    <value>Gelehrte</value>
   </data>
   <data name="JokerDesc_Scholar" xml:space="preserve">
-    <value>Los Ases dan +20 puntos y multiplican por 4</value>
+    <value>Assen gifft +20 Punkte un multiplizeert mit 4</value>
   </data>
   <data name="JokerName_Photograph" xml:space="preserve">
-    <value>Fotografía</value>
+    <value>Foto</value>
   </data>
   <data name="JokerDesc_Photograph" xml:space="preserve">
-    <value>Primera figura multiplicada por 2</value>
+    <value>Eerste Bildkort warrt mit 2 multiplizeert</value>
   </data>
   <data name="JokerName_Popcorn" xml:space="preserve">
-    <value>Palomitas</value>
+    <value>Popcorn</value>
   </data>
   <data name="JokerDesc_Popcorn" xml:space="preserve">
-    <value>+20 de bonificación a todos los votos</value>
+    <value>+20 Bonus för all Stimmen</value>
   </data>
   <data name="JokerName_SockAndBuscin" xml:space="preserve">
-    <value>Calcetín y Buscin</value>
+    <value>Sock un Buscin</value>
   </data>
   <data name="JokerDesc_SockAndBuscin" xml:space="preserve">
-    <value>Las figuras cuentan doble</value>
+    <value>Bildkorten tellt dubbelt</value>
   </data>
   <data name="JokerName_HangingChad" xml:space="preserve">
-    <value>Chad Colgante</value>
+    <value>Hangen Chad</value>
   </data>
   <data name="JokerDesc_HangingChad" xml:space="preserve">
-    <value>Primera carta jugada tres veces</value>
+    <value>Eerste Kort warrt dreemol speelt</value>
   </data>
   <data name="JokerName_Brainstorm" xml:space="preserve">
-    <value>Lluvia de Ideas</value>
+    <value>Kopp-Storm</value>
   </data>
   <data name="JokerDesc_Brainstorm" xml:space="preserve">
-    <value>Copia el comodín más a la izquierda</value>
+    <value>Kopeert den linksten Joker</value>
   </data>
   <data name="JokerName_Blueprint" xml:space="preserve">
-    <value>Plano</value>
+    <value>Bauplaan</value>
   </data>
   <data name="JokerDesc_Blueprint" xml:space="preserve">
-    <value>Copia la habilidad del comodín a la derecha</value>
+    <value>Kopeert de Fähigkeit vun den Joker rechts</value>
   </data>
 </root>
