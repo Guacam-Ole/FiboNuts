@@ -224,7 +224,7 @@ else
                                 @foreach (var player in game.Players.Where(p => p.HasVoted))
                                 {
                                     <div class="mb-2">
-                                        <strong>@player.Name</strong> selected 
+                                        <strong>@player.Name</strong> @Localizer["Selected"]
                                         <span class="badge @(player.Id == currentPlayer.Id ? "bg-primary" : "bg-secondary")">@player.OriginalVote</span>
                                         @if (player.Id == currentPlayer.Id) { <small class="text-muted">(@Localizer["You"])</small> }
                                     </div>

@@ -35,6 +35,9 @@
   <data name="RevealedJokers" xml:space="preserve">
     <value>Joker aufgedeckt!</value>
   </data>
+  <data name="ActiveJokers" xml:space="preserve">
+    <value>Aktive Joker</value>
+  </data>
   
   <!-- Game Actions -->
   <data name="CreateGame" xml:space="preserve">
@@ -134,6 +137,9 @@
   <data name="SelectedCards" xml:space="preserve">
     <value>Ausgewählte Karten</value>
   </data>
+  <data name="Selected" xml:space="preserve">
+    <value>gewählt</value>
+  </data>
   
   <!-- Messages -->
   <data name="MustMatchAllowedValue" xml:space="preserve">
@@ -219,5 +225,149 @@
   </data>
   <data name="WhyThisTool" xml:space="preserve">
     <value>Warum dieses Tool entwickelt wurde</value>
+  </data>
+
+  <!-- Game Status -->
+  <data name="WaitingForGameToStart" xml:space="preserve">
+    <value>Warten auf Spielstart</value>
+  </data>
+  <data name="AdminWillStartVoting" xml:space="preserve">
+    <value>Der Admin wird die Abstimmung starten, wenn bereit</value>
+  </data>
+  <data name="Statistics" xml:space="preserve">
+    <value>Statistiken</value>
+  </data>
+
+  <!-- Game Phases -->
+  <data name="PhaseSetup" xml:space="preserve">
+    <value>Vorbereitung</value>
+  </data>
+  <data name="PhaseVoting" xml:space="preserve">
+    <value>Abstimmung</value>
+  </data>
+  <data name="PhaseRevealed" xml:space="preserve">
+    <value>Aufgedeckt</value>
+  </data>
+
+  <!-- Joker Names -->
+  <data name="JokerName_Joker" xml:space="preserve">
+    <value>Joker</value>
+  </data>
+  <data name="JokerDesc_Joker" xml:space="preserve">
+    <value>Fügt jeder Stimme +4 hinzu</value>
+  </data>
+  <data name="JokerName_GreedyJoker" xml:space="preserve">
+    <value>Gieriger Joker</value>
+  </data>
+  <data name="JokerDesc_GreedyJoker" xml:space="preserve">
+    <value>Jede Karo-Karte gibt +3 Bonus</value>
+  </data>
+  <data name="JokerName_LustyJoker" xml:space="preserve">
+    <value>Lüsterner Joker</value>
+  </data>
+  <data name="JokerDesc_LustyJoker" xml:space="preserve">
+    <value>Jedes Herz gibt +3 Bonus</value>
+  </data>
+  <data name="JokerName_WrathfulJoker" xml:space="preserve">
+    <value>Zorniger Joker</value>
+  </data>
+  <data name="JokerDesc_WrathfulJoker" xml:space="preserve">
+    <value>Jedes Pik gibt +3 Bonus</value>
+  </data>
+  <data name="JokerName_GluttonousJoker" xml:space="preserve">
+    <value>Gefräßiger Joker</value>
+  </data>
+  <data name="JokerDesc_GluttonousJoker" xml:space="preserve">
+    <value>Jedes Kreuz gibt +3 Bonus</value>
+  </data>
+  <data name="JokerName_Misprint" xml:space="preserve">
+    <value>Fehldr uck</value>
+  </data>
+  <data name="JokerDesc_Misprint" xml:space="preserve">
+    <value>Zufälliger Bonus zwischen 1 und 23</value>
+  </data>
+  <data name="JokerName_Fibonacci" xml:space="preserve">
+    <value>Fibonacci</value>
+  </data>
+  <data name="JokerDesc_Fibonacci" xml:space="preserve">
+    <value>Jede Karte gibt +8 Bonus</value>
+  </data>
+  <data name="JokerName_ScaryFace" xml:space="preserve">
+    <value>Gruseliges Gesicht</value>
+  </data>
+  <data name="JokerDesc_ScaryFace" xml:space="preserve">
+    <value>Jede Bildkarte gibt +30 Punkte</value>
+  </data>
+  <data name="JokerName_AbstractJoker" xml:space="preserve">
+    <value>Abstrakter Joker</value>
+  </data>
+  <data name="JokerDesc_AbstractJoker" xml:space="preserve">
+    <value>+3 für jeden aktiven Joker</value>
+  </data>
+  <data name="JokerName_Hack" xml:space="preserve">
+    <value>Hack</value>
+  </data>
+  <data name="JokerDesc_Hack" xml:space="preserve">
+    <value>2, 3 und 5 zählen doppelt</value>
+  </data>
+  <data name="JokerName_GrosMichel" xml:space="preserve">
+    <value>Gros Michel</value>
+  </data>
+  <data name="JokerDesc_GrosMichel" xml:space="preserve">
+    <value>+15 Bonus auf alle Stimmen</value>
+  </data>
+  <data name="JokerName_EvenSteven" xml:space="preserve">
+    <value>Gerader Stefan</value>
+  </data>
+  <data name="JokerDesc_EvenSteven" xml:space="preserve">
+    <value>2 und 8 geben +4 Bonus</value>
+  </data>
+  <data name="JokerName_OddTodd" xml:space="preserve">
+    <value>Ungerader Todd</value>
+  </data>
+  <data name="JokerDesc_OddTodd" xml:space="preserve">
+    <value>Ungerade Karten geben +31 Punkte</value>
+  </data>
+  <data name="JokerName_Scholar" xml:space="preserve">
+    <value>Gelehrter</value>
+  </data>
+  <data name="JokerDesc_Scholar" xml:space="preserve">
+    <value>Asse geben +20 Punkte und multiplizieren mit 4</value>
+  </data>
+  <data name="JokerName_Photograph" xml:space="preserve">
+    <value>Foto</value>
+  </data>
+  <data name="JokerDesc_Photograph" xml:space="preserve">
+    <value>Erste Bildkarte wird mit 2 multipliziert</value>
+  </data>
+  <data name="JokerName_Popcorn" xml:space="preserve">
+    <value>Popcorn</value>
+  </data>
+  <data name="JokerDesc_Popcorn" xml:space="preserve">
+    <value>+20 Bonus auf alle Stimmen</value>
+  </data>
+  <data name="JokerName_SockAndBuscin" xml:space="preserve">
+    <value>Socke und Buskin</value>
+  </data>
+  <data name="JokerDesc_SockAndBuscin" xml:space="preserve">
+    <value>Bildkarten zählen doppelt</value>
+  </data>
+  <data name="JokerName_HangingChad" xml:space="preserve">
+    <value>Hängender Chad</value>
+  </data>
+  <data name="JokerDesc_HangingChad" xml:space="preserve">
+    <value>Erste Karte wird dreifach gespielt</value>
+  </data>
+  <data name="JokerName_Brainstorm" xml:space="preserve">
+    <value>Brainstorming</value>
+  </data>
+  <data name="JokerDesc_Brainstorm" xml:space="preserve">
+    <value>Kopiert den Joker ganz links</value>
+  </data>
+  <data name="JokerName_Blueprint" xml:space="preserve">
+    <value>Bauplan</value>
+  </data>
+  <data name="JokerDesc_Blueprint" xml:space="preserve">
+    <value>Kopiert die Fähigkeit des Jokers rechts daneben</value>
   </data>
 </root>

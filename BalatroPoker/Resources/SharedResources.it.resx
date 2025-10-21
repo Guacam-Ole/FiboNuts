@@ -187,4 +187,187 @@
   <data name="WhyThisTool" xml:space="preserve">
     <value>Perché questo strumento è stato sviluppato</value>
   </data>
+
+  <!-- Missing Common Entries -->
+  <data name="GameCreatedSuccessfully" xml:space="preserve">
+    <value>Gioco creato con successo</value>
+  </data>
+  <data name="AdminUrl" xml:space="preserve">
+    <value>URL Admin (per te)</value>
+  </data>
+  <data name="PlayerUrl" xml:space="preserve">
+    <value>URL Giocatore (condividi con team)</value>
+  </data>
+  <data name="GoToAdminView" xml:space="preserve">
+    <value>Vai a Vista Admin</value>
+  </data>
+  <data name="AdminView" xml:space="preserve">
+    <value>Vista Admin</value>
+  </data>
+  <data name="GamePhase" xml:space="preserve">
+    <value>Fase di Gioco</value>
+  </data>
+  <data name="SharePlayerUrl" xml:space="preserve">
+    <value>Condividi questo URL con i giocatori</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Copia</value>
+  </data>
+  <data name="Voted" xml:space="preserve">
+    <value>Ha votato</value>
+  </data>
+  <data name="Voting" xml:space="preserve">
+    <value>Votazione...</value>
+  </data>
+  <data name="SelectedCards" xml:space="preserve">
+    <value>Carte Selezionate</value>
+  </data>
+  <data name="Selected" xml:space="preserve">
+    <value>ha selezionato</value>
+  </data>
+  <data name="WaitingForGameToStart" xml:space="preserve">
+    <value>In attesa dell'inizio del gioco</value>
+  </data>
+  <data name="AdminWillStartVoting" xml:space="preserve">
+    <value>L'admin avvierà la votazione quando sarà pronto</value>
+  </data>
+  <data name="Statistics" xml:space="preserve">
+    <value>Statistiche</value>
+  </data>
+  <data name="ActiveJokers" xml:space="preserve">
+    <value>Jolly Attivi</value>
+  </data>
+
+  <!-- Game Phases -->
+  <data name="PhaseSetup" xml:space="preserve">
+    <value>Configurazione</value>
+  </data>
+  <data name="PhaseVoting" xml:space="preserve">
+    <value>Votazione</value>
+  </data>
+  <data name="PhaseRevealed" xml:space="preserve">
+    <value>Rivelato</value>
+  </data>
+
+  <!-- Joker Names -->
+  <data name="JokerName_Joker" xml:space="preserve">
+    <value>Jolly</value>
+  </data>
+  <data name="JokerDesc_Joker" xml:space="preserve">
+    <value>Aggiunge +4 a ogni voto</value>
+  </data>
+  <data name="JokerName_GreedyJoker" xml:space="preserve">
+    <value>Jolly Avido</value>
+  </data>
+  <data name="JokerDesc_GreedyJoker" xml:space="preserve">
+    <value>Ogni carta Quadri dà +3 bonus</value>
+  </data>
+  <data name="JokerName_LustyJoker" xml:space="preserve">
+    <value>Jolly Lussurioso</value>
+  </data>
+  <data name="JokerDesc_LustyJoker" xml:space="preserve">
+    <value>Ogni Cuori dà +3 bonus</value>
+  </data>
+  <data name="JokerName_WrathfulJoker" xml:space="preserve">
+    <value>Jolly Iracondo</value>
+  </data>
+  <data name="JokerDesc_WrathfulJoker" xml:space="preserve">
+    <value>Ogni Picche dà +3 bonus</value>
+  </data>
+  <data name="JokerName_GluttonousJoker" xml:space="preserve">
+    <value>Jolly Goloso</value>
+  </data>
+  <data name="JokerDesc_GluttonousJoker" xml:space="preserve">
+    <value>Ogni Fiori dà +3 bonus</value>
+  </data>
+  <data name="JokerName_Misprint" xml:space="preserve">
+    <value>Errore di Stampa</value>
+  </data>
+  <data name="JokerDesc_Misprint" xml:space="preserve">
+    <value>Bonus casuale tra 1 e 23</value>
+  </data>
+  <data name="JokerName_Fibonacci" xml:space="preserve">
+    <value>Fibonacci</value>
+  </data>
+  <data name="JokerDesc_Fibonacci" xml:space="preserve">
+    <value>Ogni carta dà +8 bonus</value>
+  </data>
+  <data name="JokerName_ScaryFace" xml:space="preserve">
+    <value>Faccia Spaventosa</value>
+  </data>
+  <data name="JokerDesc_ScaryFace" xml:space="preserve">
+    <value>Ogni figura dà +30 punti</value>
+  </data>
+  <data name="JokerName_AbstractJoker" xml:space="preserve">
+    <value>Jolly Astratto</value>
+  </data>
+  <data name="JokerDesc_AbstractJoker" xml:space="preserve">
+    <value>+3 per ogni jolly attivo</value>
+  </data>
+  <data name="JokerName_Hack" xml:space="preserve">
+    <value>Hack</value>
+  </data>
+  <data name="JokerDesc_Hack" xml:space="preserve">
+    <value>2, 3 e 5 contano doppio</value>
+  </data>
+  <data name="JokerName_GrosMichel" xml:space="preserve">
+    <value>Gros Michel</value>
+  </data>
+  <data name="JokerDesc_GrosMichel" xml:space="preserve">
+    <value>+15 bonus a tutti i voti</value>
+  </data>
+  <data name="JokerName_EvenSteven" xml:space="preserve">
+    <value>Steven Pari</value>
+  </data>
+  <data name="JokerDesc_EvenSteven" xml:space="preserve">
+    <value>2 e 8 danno +4 bonus</value>
+  </data>
+  <data name="JokerName_OddTodd" xml:space="preserve">
+    <value>Todd Dispari</value>
+  </data>
+  <data name="JokerDesc_OddTodd" xml:space="preserve">
+    <value>Le carte dispari danno +31 punti</value>
+  </data>
+  <data name="JokerName_Scholar" xml:space="preserve">
+    <value>Studioso</value>
+  </data>
+  <data name="JokerDesc_Scholar" xml:space="preserve">
+    <value>Gli Assi danno +20 punti e moltiplicano per 4</value>
+  </data>
+  <data name="JokerName_Photograph" xml:space="preserve">
+    <value>Fotografia</value>
+  </data>
+  <data name="JokerDesc_Photograph" xml:space="preserve">
+    <value>Prima figura moltiplicata per 2</value>
+  </data>
+  <data name="JokerName_Popcorn" xml:space="preserve">
+    <value>Popcorn</value>
+  </data>
+  <data name="JokerDesc_Popcorn" xml:space="preserve">
+    <value>+20 bonus a tutti i voti</value>
+  </data>
+  <data name="JokerName_SockAndBuscin" xml:space="preserve">
+    <value>Calzino e Buscin</value>
+  </data>
+  <data name="JokerDesc_SockAndBuscin" xml:space="preserve">
+    <value>Le figure contano doppio</value>
+  </data>
+  <data name="JokerName_HangingChad" xml:space="preserve">
+    <value>Chad Appeso</value>
+  </data>
+  <data name="JokerDesc_HangingChad" xml:space="preserve">
+    <value>Prima carta giocata tre volte</value>
+  </data>
+  <data name="JokerName_Brainstorm" xml:space="preserve">
+    <value>Tempesta di Idee</value>
+  </data>
+  <data name="JokerDesc_Brainstorm" xml:space="preserve">
+    <value>Copia il jolly più a sinistra</value>
+  </data>
+  <data name="JokerName_Blueprint" xml:space="preserve">
+    <value>Progetto</value>
+  </data>
+  <data name="JokerDesc_Blueprint" xml:space="preserve">
+    <value>Copia l'abilità del jolly a destra</value>
+  </data>
 </root>

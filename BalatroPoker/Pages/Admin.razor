@@ -34,7 +34,7 @@ else
             <div class="col-md-8">
                 <h1>🃏 @Localizer["AppTitle"] - @Localizer["AdminView"]</h1>
                 <div class="alert alert-secondary">
-                    <strong>@Localizer["GamePhase"]:</strong> @game.Phase 
+                    <strong>@Localizer["GamePhase"]:</strong> @GetLocalizedPhase(game.Phase) 
                     @if (game.ActiveJokers.Any())
                     {
                         <span class="ms-3"><strong>@Localizer["AvailableJokers"]:</strong> @game.ActiveJokers.Count</span>
@@ -162,15 +162,15 @@ else
                 {
                     <div class="card mt-4">
                         <div class="card-body">
-                            <h5>🎭 Voting Results</h5>
+                            <h5>🎭 @Localizer["VotingResults"]</h5>
                             
                             <div class="alert alert-success">
-                                <h6 class="mb-3"><strong>Voting Ended!</strong></h6>
+                                <h6 class="mb-3"><strong>@Localizer["VotingEnded"]</strong></h6>
                                 
                                 @foreach (var player in game.Players.Where(p => p.HasVoted))
                                 {
                                     <div class="mb-2">
-                                        <strong>@player.Name</strong> selected 
+                                        <strong>@player.Name</strong> @Localizer["Selected"]
                                         <span class="badge bg-secondary">@player.OriginalVote</span>
                                     </div>
                                 }
@@ -179,18 +179,18 @@ else
                             @if (game.ActiveJokers.Any())
                             {
                                 <div class="alert alert-info">
-                                    <h6>🃏 Active Jokers:</h6>
+                                    <h6>🃏 @Localizer["ActiveJokers"]:</h6>
                                     @foreach (var joker in game.ActiveJokers)
                                     {
                                         <div class="mb-1">
-                                            <strong>@joker.Name:</strong> @joker.Description
+                                            <strong>@GetLocalizedJokerName(joker.Name):</strong> @GetLocalizedJokerDescription(joker.Name)
                                         </div>
                                     }
                                 </div>
                             }
                             
                             <div class="alert alert-primary">
-                                <h6><strong>Final Values:</strong></h6>
+                                <h6><strong>@Localizer["FinalValues"]:</strong></h6>
                                 @foreach (var player in game.Players.Where(p => p.HasVoted))
                                 {
                                     <div class="mb-2 d-flex justify-content-between align-items-center">
@@ -219,23 +219,23 @@ else
                 {
                     <div class="card mb-4">
                         <div class="card-body">
-                            <h5>Statistics</h5>
+                            <h5>@Localizer["Statistics"]</h5>
                             <div class="row text-center">
                                 <div class="col-4">
                                     <div class="border rounded p-2">
-                                        <small class="text-muted">Average</small>
+                                        <small class="text-muted">@Localizer["Average"]</small>
                                         <div class="h4">@game.AverageVote.ToString("F1")</div>
                                     </div>
                                 </div>
                                 <div class="col-4">
                                     <div class="border rounded p-2">
-                                        <small class="text-muted">Min</small>
+                                        <small class="text-muted">@Localizer["Minimum"]</small>
                                         <div class="h4">@game.MinVote</div>
                                     </div>
                                 </div>
                                 <div class="col-4">
                                     <div class="border rounded p-2">
-                                        <small class="text-muted">Max</small>
+                                        <small class="text-muted">@Localizer["Maximum"]</small>
                                         <div class="h4">@game.MaxVote</div>
                                     </div>
                                 </div>
@@ -247,12 +247,12 @@ else
                     {
                         <div class="card">
                             <div class="card-body">
-                                <h5>Active Jokers 🎭</h5>
+                                <h5>@Localizer["ActiveJokers"] 🎭</h5>
                                 @foreach (var joker in game.ActiveJokers)
                                 {
                                     <div class="border rounded p-2 mb-2">
-                                        <strong>@joker.Name</strong>
-                                        <div class="small text-muted">@joker.Description</div>
+                                        <strong>@GetLocalizedJokerName(joker.Name)</strong>
+                                        <div class="small text-muted">@GetLocalizedJokerDescription(joker.Name)</div>
                                         <span class="badge bg-secondary">@joker.Position</span>
                                     </div>
                                 }
@@ -395,7 +395,30 @@ else
     {
         InvokeAsync(StateHasChanged);
     }
-    
+
+    private string GetLocalizedPhase(GamePhase phase)
+    {
+        return phase switch
+        {
+            GamePhase.Setup => Localizer["PhaseSetup"],
+            GamePhase.Voting => Localizer["PhaseVoting"],
+            GamePhase.Revealed => Localizer["PhaseRevealed"],
+            _ => phase.ToString()
+        };
+    }
+
+    private string GetLocalizedJokerName(string jokerName)
+    {
+        var key = "JokerName_" + jokerName.Replace(" ", "");
+        return Localizer[key];
+    }
+
+    private string GetLocalizedJokerDescription(string jokerName)
+    {
+        var key = "JokerDesc_" + jokerName.Replace(" ", "");
+        return Localizer[key];
+    }
+
     public void Dispose()
     {
         LocalizationService.LanguageChanged -= OnLanguageChangedInternal;

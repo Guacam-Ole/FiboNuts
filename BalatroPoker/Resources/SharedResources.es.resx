@@ -187,4 +187,187 @@
   <data name="WhyThisTool" xml:space="preserve">
     <value>Por qué se desarrolló esta herramienta</value>
   </data>
+
+  <!-- Missing Common Entries -->
+  <data name="GameCreatedSuccessfully" xml:space="preserve">
+    <value>Juego creado exitosamente</value>
+  </data>
+  <data name="AdminUrl" xml:space="preserve">
+    <value>URL de Admin (para ti)</value>
+  </data>
+  <data name="PlayerUrl" xml:space="preserve">
+    <value>URL de Jugador (compartir con equipo)</value>
+  </data>
+  <data name="GoToAdminView" xml:space="preserve">
+    <value>Ir a Vista de Admin</value>
+  </data>
+  <data name="AdminView" xml:space="preserve">
+    <value>Vista de Admin</value>
+  </data>
+  <data name="GamePhase" xml:space="preserve">
+    <value>Fase del Juego</value>
+  </data>
+  <data name="SharePlayerUrl" xml:space="preserve">
+    <value>Comparte esta URL con los jugadores</value>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Copiar</value>
+  </data>
+  <data name="Voted" xml:space="preserve">
+    <value>Votó</value>
+  </data>
+  <data name="Voting" xml:space="preserve">
+    <value>Votando...</value>
+  </data>
+  <data name="SelectedCards" xml:space="preserve">
+    <value>Cartas Seleccionadas</value>
+  </data>
+  <data name="Selected" xml:space="preserve">
+    <value>seleccionó</value>
+  </data>
+  <data name="WaitingForGameToStart" xml:space="preserve">
+    <value>Esperando que el juego comience</value>
+  </data>
+  <data name="AdminWillStartVoting" xml:space="preserve">
+    <value>El admin iniciará la votación cuando esté listo</value>
+  </data>
+  <data name="Statistics" xml:space="preserve">
+    <value>Estadísticas</value>
+  </data>
+  <data name="ActiveJokers" xml:space="preserve">
+    <value>Comodines Activos</value>
+  </data>
+
+  <!-- Game Phases -->
+  <data name="PhaseSetup" xml:space="preserve">
+    <value>Configuración</value>
+  </data>
+  <data name="PhaseVoting" xml:space="preserve">
+    <value>Votación</value>
+  </data>
+  <data name="PhaseRevealed" xml:space="preserve">
+    <value>Revelado</value>
+  </data>
+
+  <!-- Joker Names -->
+  <data name="JokerName_Joker" xml:space="preserve">
+    <value>Comodín</value>
+  </data>
+  <data name="JokerDesc_Joker" xml:space="preserve">
+    <value>Añade +4 a cada voto</value>
+  </data>
+  <data name="JokerName_GreedyJoker" xml:space="preserve">
+    <value>Comodín Codicioso</value>
+  </data>
+  <data name="JokerDesc_GreedyJoker" xml:space="preserve">
+    <value>Cada carta de Diamantes da +3 de bonificación</value>
+  </data>
+  <data name="JokerName_LustyJoker" xml:space="preserve">
+    <value>Comodín Lujurioso</value>
+  </data>
+  <data name="JokerDesc_LustyJoker" xml:space="preserve">
+    <value>Cada Corazón da +3 de bonificación</value>
+  </data>
+  <data name="JokerName_WrathfulJoker" xml:space="preserve">
+    <value>Comodín Iracundo</value>
+  </data>
+  <data name="JokerDesc_WrathfulJoker" xml:space="preserve">
+    <value>Cada Pica da +3 de bonificación</value>
+  </data>
+  <data name="JokerName_GluttonousJoker" xml:space="preserve">
+    <value>Comodín Glotón</value>
+  </data>
+  <data name="JokerDesc_GluttonousJoker" xml:space="preserve">
+    <value>Cada Trébol da +3 de bonificación</value>
+  </data>
+  <data name="JokerName_Misprint" xml:space="preserve">
+    <value>Error de Impresión</value>
+  </data>
+  <data name="JokerDesc_Misprint" xml:space="preserve">
+    <value>Bonificación aleatoria entre 1 y 23</value>
+  </data>
+  <data name="JokerName_Fibonacci" xml:space="preserve">
+    <value>Fibonacci</value>
+  </data>
+  <data name="JokerDesc_Fibonacci" xml:space="preserve">
+    <value>Cada carta da +8 de bonificación</value>
+  </data>
+  <data name="JokerName_ScaryFace" xml:space="preserve">
+    <value>Cara Aterradora</value>
+  </data>
+  <data name="JokerDesc_ScaryFace" xml:space="preserve">
+    <value>Cada figura da +30 puntos</value>
+  </data>
+  <data name="JokerName_AbstractJoker" xml:space="preserve">
+    <value>Comodín Abstracto</value>
+  </data>
+  <data name="JokerDesc_AbstractJoker" xml:space="preserve">
+    <value>+3 por cada comodín activo</value>
+  </data>
+  <data name="JokerName_Hack" xml:space="preserve">
+    <value>Hackeo</value>
+  </data>
+  <data name="JokerDesc_Hack" xml:space="preserve">
+    <value>2, 3 y 5 cuentan doble</value>
+  </data>
+  <data name="JokerName_GrosMichel" xml:space="preserve">
+    <value>Gros Michel</value>
+  </data>
+  <data name="JokerDesc_GrosMichel" xml:space="preserve">
+    <value>+15 de bonificación a todos los votos</value>
+  </data>
+  <data name="JokerName_EvenSteven" xml:space="preserve">
+    <value>Esteban Par</value>
+  </data>
+  <data name="JokerDesc_EvenSteven" xml:space="preserve">
+    <value>2 y 8 dan +4 de bonificación</value>
+  </data>
+  <data name="JokerName_OddTodd" xml:space="preserve">
+    <value>Todd Impar</value>
+  </data>
+  <data name="JokerDesc_OddTodd" xml:space="preserve">
+    <value>Las cartas impares dan +31 puntos</value>
+  </data>
+  <data name="JokerName_Scholar" xml:space="preserve">
+    <value>Erudito</value>
+  </data>
+  <data name="JokerDesc_Scholar" xml:space="preserve">
+    <value>Los Ases dan +20 puntos y multiplican por 4</value>
+  </data>
+  <data name="JokerName_Photograph" xml:space="preserve">
+    <value>Fotografía</value>
+  </data>
+  <data name="JokerDesc_Photograph" xml:space="preserve">
+    <value>Primera figura multiplicada por 2</value>
+  </data>
+  <data name="JokerName_Popcorn" xml:space="preserve">
+    <value>Palomitas</value>
+  </data>
+  <data name="JokerDesc_Popcorn" xml:space="preserve">
+    <value>+20 de bonificación a todos los votos</value>
+  </data>
+  <data name="JokerName_SockAndBuscin" xml:space="preserve">
+    <value>Calcetín y Buscin</value>
+  </data>
+  <data name="JokerDesc_SockAndBuscin" xml:space="preserve">
+    <value>Las figuras cuentan doble</value>
+  </data>
+  <data name="JokerName_HangingChad" xml:space="preserve">
+    <value>Chad Colgante</value>
+  </data>
+  <data name="JokerDesc_HangingChad" xml:space="preserve">
+    <value>Primera carta jugada tres veces</value>
+  </data>
+  <data name="JokerName_Brainstorm" xml:space="preserve">
+    <value>Lluvia de Ideas</value>
+  </data>
+  <data name="JokerDesc_Brainstorm" xml:space="preserve">
+    <value>Copia el comodín más a la izquierda</value>
+  </data>
+  <data name="JokerName_Blueprint" xml:space="preserve">
+    <value>Plano</value>
+  </data>
+  <data name="JokerDesc_Blueprint" xml:space="preserve">
+    <value>Copia la habilidad del comodín a la derecha</value>
+  </data>
 </root>
